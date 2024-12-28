@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome (for delete icon) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4"><%= category ? 'Edit' : 'Add' %> Category</h1>
+
+        <!-- Form for Adding/Editing a Category -->
+        <form action="/admin/category/<%= category ? category._id : 'add' %>" method="POST" class="border p-4 rounded shadow-sm bg-light">
+            <!-- Display error message if category already exists -->
+            <% if (error) { %>
+                <div class="alert alert-danger">
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <div class="form-group">
+                <label for="name">Category Name:</label>
+                <input type="text" id="name" name="name" class="form-control" value="<%= category ? category.name : '' %>" >
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+
+            <% if (category) { %>
+                <form action="/admin/category/<%= category._id %>/delete" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this category?');">
+                    <button type="submit" class="btn btn-danger btn-block mt-2">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </form>
+            <% } %>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

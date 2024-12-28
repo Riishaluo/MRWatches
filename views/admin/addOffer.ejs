@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Offer</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Add New Offer</h1>
+        <form action="/admin/add-offer" method="POST" class="mt-4">
+            <!-- Offer Title -->
+            <div class="mb-3">
+                <label for="title" class="form-label">Offer Title</label>
+                <input type="text" name="title" id="title" class="form-control" placeholder="Enter offer title" >
+            </div>
+
+            <!-- Offer Description -->
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea name="description" id="description" class="form-control" rows="3" placeholder="Enter offer description" ></textarea>
+            </div>
+
+            <!-- Discount Type -->
+            <div class="mb-3">
+                <label for="discountType" class="form-label">Discount Type</label>
+                <select name="discountType" id="discountType" class="form-select" >
+                    <option value="fixed">Fixed</option>
+                    <option value="percentage">Percentage</option>
+                </select>
+            </div>
+
+            <!-- Hidden Field for Product Price -->
+            <input type="hidden" id="productPrice" name="productPrice" value="">
+
+            <!-- Discount Value -->
+            <div class="mb-3">
+                <label for="discountValue" class="form-label">Discount Value</label>
+                <input type="number" name="discountValue" id="discountValue" class="form-control" placeholder="Enter discount value" >
+            </div>
+
+            <!-- Offer Type -->
+            <div class="mb-3">
+                <label for="offerType" class="form-label">Offer Type</label>
+                <select name="offerType" id="offerType" class="form-select" >
+                    <option value="category">Category</option>
+                    <option value="product">Product</option>
+                </select>
+            </div>
+
+            <!-- Category Field (Hidden initially) -->
+            <div id="categoryField" class="mb-3" style="display: none;">
+                <label for="category" class="form-label">Category</label>
+                <select name="category" id="category" class="form-select">
+                    <% categories.forEach(category => { %>
+                        <option value="<%= category._id %>"><%= category.name %></option>
+                    <% }); %>
+                </select>
+            </div>
+
+            <!-- Product Field (Hidden initially) -->
+            <div id="productField" class="mb-3" style="display: none;">
+                <label for="product" class="form-label">Product</label>
+                <select name="product" id="product" class="form-select">
+                    <% products.forEach(product => { %>
+                        <option value="<%= product._id %>" data-price="<%= product.price %>"><%= product.name %></option>
+                    <% }); %>
+                </select>
+            </div>
+
+            <!-- Start Date -->
+            <div class="mb-3">
+                <label for="startDate" class="form-label">Start Date</label>
+                <input type="date" name="startDate" id="startDate" class="form-control" >
+            </div>
+
+            <!-- End Date -->
+            <div class="mb-3">
+                <label for="endDate" class="form-label">End Date</label>
+                <input type="date" name="endDate" id="endDate" class="form-control" >
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Confirm</button>
+            </div>
+            
+        </form>
+    </div>
+
+    <script>
+        const offerType = document.getElementById('offerType');
+        const categoryField = document.getElementById('categoryField');
+        const productField = document.getElementById('productField');
+        const categoryInput = document.getElementById('category');
+        const productInput = document.getElementById('product');
+        const form = document.querySelector('form');
+        const discountValue = document.getElementById('discountValue');
+        const errorContainer = document.createElement('div');
+        errorContainer.className = 'text-danger mt-1';
+    
+        // Hidden field to store product price
+        const productPriceInput = document.getElementById('productPrice');
+    
+        function showError(input, message) {
+            clearError(input);
+            const error = document.createElement('div');
+            error.className = 'text-danger mt-1';
+            error.innerText = message;
+            input.parentElement.appendChild(error);
+        }
+    
+        function clearError(input) {
+            const error = input.parentElement.querySelector('.text-danger');
+            if (error) {
+                error.remove();
+            }
+        }
+    
+        productInput.addEventListener('change', function () {
+            const selectedProduct = productInput.options[productInput.selectedIndex];
+            const productPrice = selectedProduct.getAttribute('data-price');
+            productPriceInput.value = productPrice;  
+        });
+    
+        offerType.addEventListener('change', function () {
+            if (this.value === 'category') {
+                categoryField.style.display = 'block';
+                productField.style.display = 'none';
+                clearError(productInput);
+            } else if (this.value === 'product') {
+                categoryField.style.display = 'none';
+                productField.style.display = 'block';
+                clearError(categoryInput);
+            } else {
+                categoryField.style.display = 'none';
+                productField.style.display = 'none';
+                clearError(categoryInput);
+                clearError(productInput);
+            }
+        });
+    
+        if (!offerType.value) {
+            categoryField.style.display = 'none';
+            productField.style.display = 'none';
+        }
+    
+        form.addEventListener('submit', function (event) {
+            let isValid = true;
+    
+            document.querySelectorAll('.text-danger').forEach(error => error.remove());
+    
+            const title = document.getElementById('title');
+            const description = document.getElementById('description');
+            const discountType = document.getElementById('discountType');
+            const startDate = document.getElementById('startDate');
+            const endDate = document.getElementById('endDate');
+    
+            if (!title.value.trim()) {
+                showError(title, 'Offer title is required.');
+                isValid = false;
+            }
+            if (!description.value.trim()) {
+                showError(description, 'Description is required.');
+                isValid = false;
+            }
+            if (!discountType.value.trim()) {
+                showError(discountType, 'Please select a discount type.');
+                isValid = false;
+            }
+            if (!startDate.value) {
+                showError(startDate, 'Start date is required.');
+                isValid = false;
+            }
+            if (!endDate.value) {
+                showError(endDate, 'End date is required.');
+                isValid = false;
+            }
+    
+            if (isNaN(discountValue.value) || discountValue.value <= 0) {
+                showError(discountValue, 'Discount value must be a positive number.');
+                isValid = false;
+            } else if (discountValue.value < 0) {
+                showError(discountValue, 'Discount value cannot be a negative number.');
+                isValid = false;
+            }
+    
+            const productPrice = parseFloat(productPriceInput.value);
+            console.log(productPrice)
+            if (discountValue.value > productPrice) {
+                showError(discountValue, `Discount value cannot exceed the product price of ${productPrice}.`);
+                isValid = false;
+            }
+    
+            if (offerType.value === 'category' && !categoryInput.value.trim()) {
+                showError(categoryInput, 'Please select a category.');
+                isValid = false;
+            } else if (offerType.value === 'product' && !productInput.value.trim()) {
+                showError(productInput, 'Please select a product.');
+                isValid = false;
+            }
+    
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

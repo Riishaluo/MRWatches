@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* Sidebar Styling */
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            color: #ecf0f1;
+        }
+        .sidebar h1 {
+            font-size: 22px;
+            margin-bottom: 30px;
+            color: #ecf0f1;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            margin-bottom: 20px;
+        }
+        .sidebar ul li a {
+            text-decoration: none;
+            font-size: 18px;
+            color: #ecf0f1;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s ease;
+        }
+        .sidebar ul li a:hover {
+            color: #3498db;
+        }
+        .sidebar ul li a i {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <ul>
+        <li><a href="/admin/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="/admin/products"><i class="fas fa-box"></i> Products</a></li>
+        <li><a href="/admin/category"><i class="fas fa-th-list"></i> Categories</a></li>
+        <li><a href="/admin/offer"><i class="fas fa-tags"></i> Offers</a></li>
+        <li><a href="/admin/adminCoupon"><i class="fas fa-gift"></i> Coupons</a></li>
+        <li><a href="/admin/users"><i class="fas fa-users"></i> Users</a></li>
+        <li><a href="/admin/orders"><i class="fas fa-box-open"></i> Orders</a></li>
+        <li><a href="/admin/sales-report"><i class="fas fa-chart-bar"></i> Sales Report</a></li>
+        <li><a href="#"><i class="fas fa-cogs"></i> Settings</a></li>
+    </ul>
+</body>
+</html>

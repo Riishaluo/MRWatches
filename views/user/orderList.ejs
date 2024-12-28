@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders</title>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.8/dist/sweetalert2.min.css" rel="stylesheet">
+    <style>
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100vh; /* Full height */
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            display: flex;
+            flex-direction: column;
+            padding: 25px 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            transition: transform 0.3s ease;
+            animation: slideIn 0.5s ease-out;
+            z-index: 10; 
+        }
+    
+        /* Sidebar Title */
+        .sidebar h3 {
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #fff;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+    
+        /* Sidebar Links */
+        .sidebar a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 14px 20px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: 500;
+            display: block;
+            transition: background 0.3s, transform 0.3s ease;
+            position: relative;
+        }
+    
+        .sidebar a:hover {
+            background-color: #34495e;
+            transform: translateX(10px); /* Subtle hover effect */
+        }
+    
+        .sidebar a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: #3498db;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+    
+        .sidebar a:hover::before {
+            transform: scaleY(1); /* Slide indicator on hover */
+        }
+    
+        .sidebar a.active {
+            background-color: #3498db;
+            color: #fff;
+        }
+    
+        .sidebar a.active::before {
+            background-color: #ecf0f1;
+        }
+    
+        /* Sidebar Slide Animation */
+        @keyframes slideIn {
+            from {
+                transform: translateX(-250px);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+    
+        /* Main Content Styles */
+        .order-container {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            margin-left: 250px; /* Added margin to account for sidebar width */
+        }
+    
+        h1 {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+    
+        .order-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+    
+        .order-table th, .order-table td {
+            padding: 12px 20px;
+            text-align: center;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+    
+        .order-table th {
+            background-color: #3498db;
+            color: white;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+    
+        .order-table td {
+            background-color: #f9f9f9;
+        }
+    
+        .order-table tr:nth-child(even) {
+            background-color: #f1f1f1; /* Alternating row colors */
+        }
+    
+        .order-table tr:hover {
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+    
+        .status {
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+    
+        .status.pending {
+            color: #f39c12;
+        }
+    
+        .status.completed {
+            color: #28a745;
+        }
+    
+        .status.cancelled {
+            color: #e74c3c;
+        }
+    
+.product-images {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+
+.product-image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+}
+
+
+.product-image {
+    width: 80px; 
+    height: 80px;
+    object-fit: cover; 
+    border-radius: 5px; 
+    transition: transform 0.3s ease; 
+}
+
+
+.product-image:hover {
+    transform: scale(1.1); 
+}
+
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+    
+            .sidebar h3 {
+                text-align: center;
+                font-size: 22px;
+            }
+    
+            .sidebar a {
+                text-align: center;
+                font-size: 16px;
+            }
+    
+            .order-container {
+                margin-left: 0;
+                padding: 10px;
+            }
+    
+            .order-table {
+                font-size: 12px;
+            }
+        }
+.arrow-link {
+    color: #3498db; 
+    font-size: 24px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+.arrow-link:hover {
+    color: #2980b9; 
+}
+
+
+.arrow {
+    font-size: 24px; 
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+
+.arrow-link:hover .arrow {
+    transform: translateX(5px);
+}
+
+.pagination {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin: 20px 0;
+            padding: 0;
+        }
+
+        .pagination a,
+        .pagination span {
+            display: block;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #007bff;
+            border: 1px solid #ddd;
+            margin: 0 2px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .pagination a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .pagination .active {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+    </style>
+    
+    <body>
+        <div class="sidebar">
+            <h3>Account Menu</h3>
+            <a href="/">Home</a>
+            <a href="/my-account/details">My Details</a>
+            <a href="/my-address">My Address</a>
+            <a href="/my-orders">My Orders</a>
+            <a href="/my-wallet">wallet</a>
+        </div>
+        
+        <div class="order-container">
+            <h1>My Orders</h1>
+    
+            <% if (order && order.length > 0) { %>
+                <table class="order-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Order Date</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Image</th>
+                            <th>Details</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% order.forEach(order => { %>
+                            <tr>
+                                <td><%= order._id %></td>
+                                <td><%= order.createdAt.toLocaleDateString() %></td>
+                                <td>Rs. <%= order.totalPrice %></td>
+                                <td class="status <%= order.status.toLowerCase() %>"><%= order.status %></td>
+                                <td>
+                                    <% if (order.cartItems.length > 0) { %>
+                                        <div class="product-images">
+                                            <% order.cartItems.forEach(item => { %>
+                                                <% if (item.product.images && item.product.images.length > 0) { %>
+                                                    <div class="product-image-container">
+                                                        <img src="/<%= item.product.images[0] %>" alt="Product Image" class="product-image">
+                                                    </div>
+                                                <% } else { %>
+                                                    <div class="product-image-container">
+                                                        <img src="/path-to-default-image.jpg" alt="Default Image" class="product-image">
+                                                    </div>
+                                                <% } %>
+                                            <% }) %>
+                                        </div>
+                                    <% } else { %>
+                                        <img src="/path-to-default-image.jpg" alt="Default Image" class="product-image">
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <a href="/orderDetailed/<%= order._id %>" class="arrow-link">
+                                        <span class="arrow">&#8594;</span> 
+                                    </a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p class="no-orders">No orders found.</p>
+            <% } %>
+            
+            <ul class="pagination">
+                <% if (currentPage > 1) { %>
+                    <li><a href="?page=<%= currentPage - 1 %>" class="prev">&laquo; Previous</a></li>
+                <% } %>
+            
+                <% for (let i = 1; i <= totalPages; i++) { %>
+                    <li>
+                        <a href="?page=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>">
+                            <%= i %>
+                        </a>
+                    </li>
+                <% } %>
+            
+                <% if (currentPage < totalPages) { %>
+                    <li><a href="?page=<%= currentPage + 1 %>" class="next">Next &raquo;</a></li>
+                <% } %>
+            </ul>
+
+        </div>
+
+        
+    </body>
+    
+</html>
+
+
+
+
+
+
+
+

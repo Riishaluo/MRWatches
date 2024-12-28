@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+    <!-- Link to Bootstrap for improved styling -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            background-color: #343a40;
+            color: white;
+            padding: 20px;
+        }
+        .sidebar h1 {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .content {
+            margin-left: 260px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h1>MR WATCHES</h1>
+        <%- include('../partials/sidebar') %>
+    </div>
+    <div class="content">
+        <div class="container mt-5">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white text-center">
+                    <h2>User Management</h2>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-hover">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% users.forEach(user => { %>
+                                <tr>
+                                    <td><%= user.email %></td>
+                                    <td>
+                                        <span class="badge <%= user.isBlocked ? 'badge-danger' : 'badge-success' %>">
+                                            <%= user.isBlocked ? 'Blocked' : 'Active' %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn <%= user.isBlocked ? 'btn-warning' : 'btn-danger' %> btn-sm" 
+                                                onclick="confirmToggle('<%= user._id %>', '<%= user.isBlocked %>')">
+                                             <%= user.isBlocked ? 'Unblock' : 'Block' %>
+                                        </button>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">Confirm Action</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to <span id="modalAction"></span> this user?</p>
+                </div>                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmActionBtn">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ 
+    <script>
+        let selectedUserId;
+        let newStatus;
+
+        function confirmToggle(userId, isCurrentlyBlocked) {
+            selectedUserId = userId;
+            newStatus = isCurrentlyBlocked === 'true' ? false : true;
+
+            const actionText = newStatus ? 'Block' : 'Unblock';
+            document.getElementById('modalAction').textContent = actionText;
+
+            $('#confirmationModal').modal('show');
+        }
+
+        document.getElementById('confirmActionBtn').addEventListener('click', function () {
+            axios.post(`/admin/toggle-user-block/${selectedUserId}`, { isBlocked: newStatus })
+                .then(response => {
+                    if (response.data.success) {
+                        location.reload(); 
+                    } else {
+                        console.error('Failed to toggle block status.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error toggling block status:', error);
+                });
+
+            $('#confirmationModal').modal('hide');
+        });
+    </script>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <link rel="stylesheet" href="/assets/login.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #e6f7ff; /* Light blue background */
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            background-color: #f0f8ff; /* Alice blue */
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 255, 0.2); /* Blue shadow */
+        }
+
+        .form-container {
+            padding: 20px;
+        }
+
+        #otpContainer {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .otp-block {
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            text-align: center;
+            border: 2px solid #007bff; /* Blue border */
+            border-radius: 5px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .otp-block:focus {
+            border-color: #0056b3; /* Darker blue */
+        }
+
+        #submitBtn {
+            background-color: #007bff; /* Blue button */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #submitBtn:hover {
+            background-color: #0056b3; /* Darker blue */
+        }
+
+        #resendLink {
+            color: #007bff; /* Blue link */
+            text-decoration: none;
+        }
+
+        #resendLink:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+
+<body>
+    <h2>MR Watches</h2>
+    <div class="container" id="container">
+        <div class="form-container otp-container">
+            <form id="otpForm" action="/verify-forgot-otp" method="post">
+                <span>
+                    <%= message %>
+                </span>
+                <h1>OTP Verification</h1>
+                <span>Enter the OTP sent to your email</span>
+                <div id="otpContainer">
+                    <input type="text" name="otp1" class="otp-block" maxlength="1" required />
+                    <input type="text" name="otp2" class="otp-block" maxlength="1" required />
+                    <input type="text" name="otp3" class="otp-block" maxlength="1" required />
+                    <input type="text" name="otp4" class="otp-block" maxlength="1" required />
+                    <input type="text" name="otp5" class="otp-block" maxlength="1" required />
+                    <input type="text" name="otp6" class="otp-block" maxlength="1" required />
+                </div>
+
+                <div>
+                    <span id="timer">Time left: 30 seconds</span>
+                </div>
+                <button type="submit" id="submitBtn">Verify OTP</button>
+                <a href="/resendForgot-otp" id="resendLink" style="display: none;">Resend OTP</a>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>-MR Watches Official</p>
+    </footer>
+
+   
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Timer functionality
+            let timeLeft = 30;
+            let timerExpired = false; // Flag to track if time has expired
+            const timerElement = document.getElementById('timer');
+            const submitBtn = document.getElementById('submitBtn');
+            const resendLink = document.getElementById('resendLink');
+            const otpBlocks = document.querySelectorAll('.otp-block');
+    
+            // Timer countdown
+            const countdown = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = `Time left: ${timeLeft} seconds`;
+    
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    timerElement.textContent = 'Time is up! Please resend the OTP.';
+                    timerExpired = true; 
+                    submitBtn.disabled = true; 
+                    resendLink.style.display = 'block'; 
+                }
+            }, 1000);
+    
+            // Handle input and navigation between fields
+            otpBlocks.forEach((block, index) => {
+                block.addEventListener('input', () => {
+                    if (block.value.length === 1 && index < otpBlocks.length - 1) {
+                        otpBlocks[index + 1].focus(); 
+                    }
+                });
+    
+                block.addEventListener('keydown', (event) => {
+                    if (event.key === 'Backspace' && block.value.length === 0 && index > 0) {
+                        otpBlocks[index - 1].focus(); 
+                    }
+                });
+            });
+    
+            // Submit button event
+            document.getElementById('otpForm').addEventListener('submit', (event) => {
+                event.preventDefault(); // Prevent default form submission
+    
+                // Check if the timer has expired
+                if (timerExpired) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Expired OTP',
+                        text: 'The OTP has expired. Please request a new one.'
+                    });
+                    return; // Stop further execution
+                }
+    
+                // Collect and join the OTP input values
+                const otp = Array.from(otpBlocks).map(block => block.value).join(''); // Join values
+                console.log(otp); // Log the OTP for debugging
+    
+                // Send the OTP for verification
+                fetch('/verify-forgot-otp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ otp })
+                })
+                .then(response => {
+                    console.log(response);
+                    
+                    if (!response.ok) {
+                        return response.json().then(data => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Invalid or Expired OTP',
+                                text: 'Error verifying OTP.'
+                            }); // Show error message
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = '/reset-password'; // Redirect on success
+                    }
+                })
+                .catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid OTP',
+                        text: 'Please check the OTP'
+                    }); // Notify user of network error
+                });
+            });
+        });
+    </script>
+    
+</body>
+
+</html>

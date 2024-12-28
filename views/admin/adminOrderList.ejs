@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - User Orders</title>
+    <!-- Bootstrap CSS for styling -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+            display: flex;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #343a40;
+            color: #fff;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+        }
+        .container {
+            margin-left: 270px;
+            margin-top: 30px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            flex-grow: 1;
+        }
+        h1 {
+            color: #343a40;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            margin-top: 10px;
+        }
+        thead th {
+            background-color: #343a40;
+            color: #fff;
+            text-align: center;
+        }
+        tbody td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .btn-view {
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .btn-view:hover {
+            background-color: #0056b3;
+        }
+        .status {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .status-pending { background-color: #ffc107; color: #343a40; }
+        .status-completed { background-color: #28a745; color: #fff; }
+        .status-cancelled { background-color: #dc3545; color: #fff; }
+
+        .no-orders-message {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 18px;
+        color: #777;
+}
+
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h1>MR WATCHES</h1>
+        <%- include('../partials/sidebar') %>
+    </div>
+
+    <div class="container">
+        <h1>All User Orders</h1>
+        <% if (orders && orders.length > 0) { %>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>User</th>
+                        <th>Total Price</th>
+                        <th>Order Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% orders.forEach(order => { %>
+                        <tr>
+                            <td><%= order._id %></td>
+                            <td><%= order.userId ? order.userId.name : 'N/A' %> (<%= order.userId ? order.userId.email : 'N/A' %>)</td>
+                            <td>Rs. <%= order.totalPrice %></td>
+                            <td><%= order.createdAt.toDateString() %></td>
+                            <td>
+                                <div>
+                                    <select name="status" class="status-dropdown" data-order-id="<%= order._id %>" onchange="updateOrderStatus(this)"
+                                        <%= order.status === 'completed' || order.status === 'cancelled' || order.status === 'returned' ? 'disabled' : '' %>>
+                                        <option value="pending" <%= order.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                                        <option value="completed" <%= order.status === 'completed' ? 'selected' : '' %>>Completed</option>
+                                        <option value="cancelled" <%= order.status === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                        <option value="returned" <%= order.status === 'returned' ? 'selected' : '' %>>Returned</option>
+                                    </select>
+                                </div>
+                                
+                            </td>
+                            <td>
+                                <a href="/admin/orders/<%= order._id %>" class="btn-view">View Details</a>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <div class="no-orders-message">
+                <p>No orders found.</p>
+            </div>
+        <% } %>
+    </div>
+    
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<script>
+async function updateOrderStatus(selectElement) {
+    const orderId = selectElement.getAttribute('data-order-id');
+    const newStatus = selectElement.value;
+
+    try {
+        const response = await fetch(`/admin/orders/${orderId}/status`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ status: newStatus }),
+        });
+
+        if (response.ok) {
+            const updatedStatus = newStatus.toLowerCase();
+
+            swal({
+                title: "Success",
+                text: "Order updated successfully",
+                icon: "success",
+                button: "OK",
+            });
+
+            const statusDisplay = document.querySelector(`#status-display-${orderId}`);
+            if (statusDisplay) {
+                statusDisplay.textContent = newStatus; 
+                statusDisplay.className = `status-label ${updatedStatus}`; 
+            }
+
+            if (updatedStatus === "cancelled" || updatedStatus === "completed" || updatedStatus === "returned") {
+                selectElement.disabled = true;
+            }
+            
+            const selectedOption = selectElement.querySelector(`option[value="${updatedStatus}"]`);
+            if (selectedOption) {
+                selectedOption.disabled = true;
+            }
+        } else {
+            const errorData = await response.json();
+            swal({
+                title: 'Error!',
+                text: errorData.error || 'Failed to update order status.',
+                icon: 'error',
+                button: 'Try Again',
+            });
+        }
+    } catch (error) {
+        console.error('Error updating order status:', error);
+        swal({
+            title: 'Error!',
+            text: 'An unexpected error occurred. Please try again.',
+            icon: 'error',
+            button: 'OK',
+        });
+    }
+}
+</script>

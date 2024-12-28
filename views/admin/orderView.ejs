@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Details - Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+        }
+        .order-info, .product-info, .shipping-info, .total-info {
+            margin: 10px 0;
+        }
+        .label {
+            font-weight: bold;
+            color: #333;
+        }
+        .value {
+            color: #666;
+            margin-left: 10px;
+        }
+        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .product-table th, .product-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .product-table th {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .btn-update {
+            background-color: #28a745;
+        }
+        .btn-cancel {
+            background-color: #dc3545;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Order Details</h1>
+
+        <!-- Order Summary -->
+        <div class="section">
+            <div class="section-title">Order Summary</div>
+            <div class="order-info">
+                <span class="label">Order ID:</span> <span class="value"><%= order._id %></span>
+            </div>
+            <div class="order-info">
+                <span class="label">Order Date:</span> <span class="value"><%= order.createdAt.toDateString() %></span>
+            </div>
+            <div class="order-info">
+                <span class="label">Status:</span> <span class="value"><%= order.status %></span>
+            </div>
+            <% if (order.status === 'cancelled') { %>
+                <div class="order-info">
+                    <span class="label">Reason for Cancelling:</span> <span class="value"><%= order.cancelReason %></span>
+                </div>
+            <% } %>
+        </div>
+
+        <!-- User Information -->
+        <div class="section">
+            <div class="section-title">User Information</div>
+            <div class="shipping-info">
+                <span class="label">Name:</span> <span class="value"><%= order.userId ? order.userId.name : 'N/A' %></span>
+            </div>
+            <div class="shipping-info">
+                <span class="label">Email:</span> <span class="value"><%= order.userId ? order.userId.email : 'N/A' %></span>
+            </div>
+            <div class="shipping-info">
+                <span class="label">Shipping Address:</span>
+                <div class="value">
+                    <%= order.address && order.address.name %>,
+                    <%= order.address && order.address.street %>,
+                    <%= order.address && order.address.city %>,
+                    <%= order.address && order.address.state %>,
+                    <%= order.address && order.address.zip %>,
+                    <%= order.address && order.address.phone %>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Information -->
+        <div class="section">
+            <div class="section-title">Products</div>
+            <table class="product-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% order.cartItems.forEach(item => { %>
+                        <tr>
+                            <td><%= item.product.name %></td>
+                            <td><%= item.quantity %></td>
+                            <td>Rs. <%= item.product.price %></td>
+                            <td>Rs. <%= item.quantity * item.product.price %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Order Total -->
+        <div class="section">
+            <div class="section-title">Order Total</div>
+            <div class="total-info">
+                <span class="label">Total Price:</span> <span class="value">Rs. <%= order.totalPrice %></span>
+            </div>
+        </div>
+
+        <!-- Return Requests Section -->
+        <div class="section">
+            <div class="section-title">Return Requests</div>
+            <% if (order.returnRequested) { %>
+                <div class="order-info">
+                    <span class="label">Return Requested:</span>
+                    <span class="value">Yes</span>
+                </div>
+                <div class="order-info">
+                    <span class="label">Reason:</span>
+                    <span class="value"><%= order.returnReason %></span>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-update approve-return" data-order-id="<%= order._id %>">Approve</button>
+                    <button class="btn btn-cancel reject-return" data-order-id="<%= order._id %>">Reject</button>
+                </div>
+            <% } else { %>
+                <div class="order-info">
+                    <span class="value">No return request for this order.</span>
+                </div>
+            <% } %>
+        </div>
+
+    </div>
+</body>
+
+
+
+</html>
+
+<!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener('click', async (event) => {
+        if (event.target.classList.contains('approve-return') || event.target.classList.contains('reject-return')) {
+            const orderId = event.target.getAttribute('data-order-id');
+            const action = event.target.classList.contains('approve-return') ? 'approve' : 'reject';
+
+            try {
+                const response = await fetch('/admin//handle-return-request', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ orderId, action }),
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    Swal.fire('Success', data.message, 'success').then(() => location.reload());
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            } catch (error) {
+                Swal.fire('Error', 'An error occurred. Please try again.', 'error');
+            }
+        }
+    });
+</script>

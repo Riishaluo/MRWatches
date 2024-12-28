@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <link rel="stylesheet" href="/path/to/cropper.css"> <!-- Update with your actual path -->
+    <script src="/path/to/cropper.js"></script> <!-- Update with your actual path -->
+    <script src="/path/to/jquery.js"></script> <!-- Update with your actual path -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Cropper.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+
+<!-- Cropper.js JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+
+    <style>
+ body {
+    font-family: Arial, sans-serif;
+  }
+
+  .admin-layout {
+    display: flex;
+  }
+
+  .main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #f4f4f4;
+    margin-top: 75px;
+  }
+
+  .page-content {
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Image Upload Section */
+  .image-upload-container {
+    display: flex;
+    justify-content: center; /* Center the images horizontally */
+    margin-bottom: 20px;
+  }
+
+  .image-upload-container .form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 15px;
+  }
+
+  .form-group img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+
+  .upload-photo {
+    color: #3498db;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  /* Input Field Section */
+  .input-field-container {
+    width: 100%;
+  }
+
+  .input-field-container .form-group {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 15px;
+    gap: 10px;
+  }
+
+  .input-field-container .form-group input,
+  .input-field-container .form-group select  {
+    width: 48%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+   
+  }
+
+  .add-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+
+  .add-btn:hover {
+    background-color: #45a049;
+  }
+
+  .form-group textarea{
+    width: 100%;
+    resize: vertical;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 12px 20px;
+  }
+
+
+  /* Hide cropped image canvas initially */
+  #cropModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .crop-container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 600px; /* Restrict max width */
+    width: 90%; /* Ensure responsiveness */
+    max-height: 90%; /* Prevent overflow */
+    overflow-y: auto; /* Scroll if content is too large */
+  }
+
+  .crop-container img {
+    max-width: 100%;
+    max-height: 400px; /* Restrict image height */
+  }
+
+  .crop-actions {
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .crop-actions button {
+    padding: 8px 16px;
+    margin: 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .crop-actions button:hover {
+    background-color: #0056b3;
+  }
+
+  .content-head{
+    display: flex
+  }
+
+
+  .errore{
+    display: flex;
+    gap: 218px;
+    color: red;
+  }
+  .errore1{
+    display: flex;
+    gap: 235px;
+    color: red;
+  }
+
+  .innerdiv{
+    width: 460px;
+    height: 20px;
+  }
+
+  .input-field-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Adds uniform space between fields */
+}
+
+.form-group {
+    width: 100%; /* Ensures inputs take the full width */
+}
+
+textarea {
+    resize: vertical; /* Allows vertical resizing */
+}
+
+    </style>
+</head>
+
+<body>
+    <div class="page-content">
+        <h1 class="content-head"><a href="/admin/products"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#666666"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg></a>Add Products</h1>
+        <div class="form-container">
+          <!-- Image Upload Section with Cropping -->
+          <div class="image-upload-container">
+            <div class="form-group">
+              <img id="productImage1" src="https://via.placeholder.com/100" alt="Product Image 1">
+              <input type="file" id="imageUpload1" style="display: none;" accept="image/*" onchange="showCropper(event, 1)">
+              <div class="upload-photo" onclick="document.getElementById('imageUpload1').click();">Upload Photo 1</div>
+            </div>
+            <div class="form-group">
+              <img id="productImage2" src="https://via.placeholder.com/100" alt="Product Image 2">
+              <input type="file" id="imageUpload2" style="display: none;" accept="image/*" onchange="showCropper(event, 2)">
+              <div class="upload-photo" onclick="document.getElementById('imageUpload2').click();">Upload Photo 2</div>
+            </div>
+
+            <div class="form-group">
+              <img id="productImage3" src="https://via.placeholder.com/100" alt="Product Image 3">
+              <input type="file" id="imageUpload3" style="display: none;" accept="image/*" onchange="showCropper(event, 3)">
+              <div class="upload-photo" onclick="document.getElementById('imageUpload3').click();">Upload Photo 3</div>
+            </div>
+          </div>
+          <span id="imageError" style="color: red;"></span>
+          <br><br>
+
+          <!-- Product Information Input Fields -->
+          
+          <div class="input-field-container">
+            <!-- Product Name Error and Input -->
+            <div class="errore">
+                <div class="innerdiv"><span id="nameErrore"></span></div>
+                <div class="innerdiv"><span id="brandErrore"></span></div>
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Product Name" name="productName" id="productName">
+            </div>
+        
+            <!-- Price Error and Input -->
+            <div class="errore">
+                <div class="innerdiv"><span id="priceErrore"></span></div>
+            </div>
+            <div class="form-group">
+                <input type="number" placeholder="Price" name="price" id="price">
+            </div>
+        
+
+            <div class="form-group">
+              <input type="number" class="form-control" id="stock" name="stock" placeholder="Stock">
+          </div>   
+            <!-- Stock and Category Errors -->
+        
+            <!-- Category Selection -->
+            <div class="form-group">
+                <select id="category" name="category">
+                    <option value="">Select Category</option>
+                    <% categories.forEach(category => { %>
+                        <option value="<%= category._id %>"><%= category.name %></option>
+                    <% }) %>
+                </select>
+            </div>
+        
+            <!-- Stock Error and Input -->
+               
+        
+            <!-- Description Error and Textarea -->
+            <div class="errore">
+                <div class="innerdiv"><span id="DescriptionErrore"></span></div>
+            </div>
+            <div class="form-group">
+                <textarea name="description" placeholder="Description" id="description"></textarea>
+            </div>
+        </div>
+        
+
+          <button class="add-btn" id="submit-btn" onclick="submitProduct(false)">Add Now</button>
+        </div>
+      </div>
+      <div id="cropModal">
+        <div class="crop-container">
+          <img id="cropImage" src="">
+          <div class="crop-actions">
+            <button onclick="cropImage()">Crop</button>
+            <button onclick="closeCropModal()">Cancel</button>
+          </div>
+        </div>
+      </div>    
+</body>
+
+<script>
+    function validateForm() {
+        // Clear previous error messages
+        document.getElementById("nameErrore").textContent = "";
+        document.getElementById("priceErrore").textContent = "";
+        document.getElementById("categoryErrore").textContent = "";
+        document.getElementById("DescriptionErrore").textContent = "";
+        document.getElementById("imageError").textContent = "";
+
+        let isValid = true;
+
+        // Validate Product Name
+        const productName = document.getElementById("productName").value;
+        const nameError = document.getElementById("nameErrore");
+        if (!productName) {
+            nameError.textContent = "Product name is required";
+            isValid = false;
+        } else if (/^\s/.test(productName)) {
+            nameError.textContent = "Product name cannot start with a space";
+            isValid = false;
+        } else if (/[^a-zA-Z0-9 ]/.test(productName)) {
+            nameError.textContent = "Product name cannot contain special characters";
+            isValid = false;
+        }
+
+        // Validate Price
+        const price = document.getElementById("price").value;
+        const priceError = document.getElementById("priceErrore");
+        if (!price) {
+            priceError.textContent = "Price is required";
+            isValid = false;
+        } else if (price <= 0) {
+            priceError.textContent = "Price must be greater than 0";
+            isValid = false;
+        }
+
+        // Validate Category Selection
+        const category = document.getElementById("category").value;
+        const categoryError = document.getElementById("categoryErrore");
+        if (!category) {
+            categoryError.textContent = "Please select a category";
+            isValid = false;
+        }
+
+        // Validate Description
+        const description = document.getElementById("description").value;
+        const descriptionError = document.getElementById("DescriptionErrore");
+        if (!description) {
+            descriptionError.textContent = "Description is required";
+            isValid = false;
+        }
+
+        // Validate Images (check if at least one image is uploaded)
+        const imageUpload1 = document.getElementById("imageUpload1").files.length;
+        const imageUpload2 = document.getElementById("imageUpload2").files.length;
+        const imageUpload3 = document.getElementById("imageUpload3").files.length;
+        const imageError = document.getElementById("imageError");
+        if (!imageUpload1 && !imageUpload2 && !imageUpload3) {
+            imageError.textContent = "Please upload at least one product image";
+            isValid = false;
+        }
+
+
+        return isValid;
+    }
+
+    // Event listener for form submission
+    function submitProduct() {
+        if (validateForm()) {
+            // If validation is successful, submit the form here (AJAX call or form submit)
+            console.log("Form is valid. Submitting...");
+            // For example, submit with form.submit() if using a form tag, or your existing submit logic
+        } else {
+            console.log("Form validation failed.");
+        }
+    }
+</script>
+
+
+<script>
+let cropper;
+let currentImageNumber;
+let imageBlobs = {};
+
+
+
+
+function showCropper(event, imageNumber) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const cropImage = document.getElementById('cropImage');
+            cropImage.src = e.target.result;
+
+           
+            currentImageNumber = imageNumber;
+
+            document.getElementById('cropModal').style.display = 'flex';
+
+            if (cropper) {
+                cropper.destroy();
+            }
+
+            cropper = new Cropper(cropImage, { aspectRatio: 1, viewMode: 1 });
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+
+
+
+function cropImage() {
+    const croppedCanvas = cropper.getCroppedCanvas();
+    croppedCanvas.toBlob(function (blob) {
+        if (blob) {
+            imageBlobs[currentImageNumber] = blob;
+        } else {
+            console.error('Failed to create Blob.');
+        }
+
+        const croppedImage = document.getElementById('productImage' + currentImageNumber);
+        croppedImage.src = croppedCanvas.toDataURL();
+        closeCropModal();
+    });
+}
+
+
+async function submitProduct(isEditMode, productId = null) {
+const formData = new FormData();
+    formData.append('productName', document.getElementById('productName').value);
+    formData.append('price', document.getElementById('price').value);
+    formData.append('category', document.getElementById('category').value);
+    formData.append('description', document.getElementById('description').value);
+    formData.append('stock', document.getElementById('stock').value);
+
+
+   
+    for (let i = 1; i <= 3; i++) {
+        const blob = imageBlobs[i];
+        if (blob) {
+            formData.append('images', blob, `productImage${i}.png`);
+        }
+    }
+
+    const url = '/admin/add-product'
+    
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+            window.location.href = '/admin/products';
+        } else {
+            alert(data.message || 'Failed to submit product.');
+        }
+    } catch (error) {
+        console.error('Error found from fetch:', error);
+        alert('Failed to submit product.');
+    }
+
+}
+
+function closeCropModal() {
+    document.getElementById('cropModal').style.display = 'none';
+    cropper.destroy();
+}
+</script>
+<!-- Axios CDN -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</html>

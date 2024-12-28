@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/assets/login.css">
+</head>
+<body>
+    <h2>MR Watches</h2>
+    <div class="container" id="container">
+        <div class="form-container sign-in-container">
+            <form id="loginForm" action="/login" method="POST" onsubmit="return validateLogin(event);">
+                <h1>Sign In</h1>
+                <span>or use your account</span>
+                    <span style="color: red;">
+                        <%= message %> 
+                    </span>
+                <input type="email" id="email" name="email" placeholder="Email" />
+                <input type="password" id="password" name="password" placeholder="Password" />
+                <div id="error-message" style="color: red;"></div>
+                <a href="/forgot-password">Forgot your password?</a>
+                <button type="submit">Sign In</button>
+            </form>            
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Welcome Back!</h1>
+                    <p>To keep connected with us please login with your personal info</p>
+                    <button class="ghost" id="signIn">Sign In</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Enter your personal details and start your journey with us</p>
+                    <button class="ghost" id="signUp" onclick="window.location.href='/register';">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>-MR watches Official</p>
+    </footer>
+
+    <script>
+
+        function validateLogin(event) {
+            event.preventDefault(); 
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorMessage = document.getElementById('error-message');
+
+            errorMessage.textContent = ''; 
+
+            
+            if (!email || !password) {
+                errorMessage.textContent = 'All fields are required.';
+                return false; 
+            }
+
+          
+            const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+            if (!emailPattern.test(email)) {
+                errorMessage.textContent = 'Please enter a valid email address.';
+                return false; 
+            }
+
+            
+            if (password.length < 6) {
+                errorMessage.textContent = 'Password must be at least 6 characters long.';
+                return false; 
+            }
+
+            
+            
+            event.target.submit(); 
+
+            return false; 
+        }
+    </script>
+</body>
+</html>

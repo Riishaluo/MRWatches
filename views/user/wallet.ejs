@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100vh;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            display: flex;
+            flex-direction: column;
+            padding: 25px 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .sidebar h3 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #fff;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .sidebar a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 500;
+            display: block;
+            transition: background 0.3s, transform 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: #34495e;
+            transform: translateX(10px);
+        }
+
+        .sidebar a.active {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .wallet-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .wallet-card:hover {
+            transform: scale(1.05);
+        }
+
+        .wallet-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .balance {
+            font-size: 32px;
+            font-weight: 600;
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+
+        .balance-info {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 20px;
+        }
+
+        .wallet-footer {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            color: #444;
+        }
+
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transaction-table thead {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .transaction-table th,
+        .transaction-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .transaction-table tbody tr:nth-child(odd) {
+            background-color: #f4f4f4;
+        }
+
+        .transaction-table tbody tr:hover {
+            background-color: #eaeaea;
+        }
+
+        .status {
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .status.success {
+            color: #28a745;
+        }
+
+        .status.pending {
+            color: #ffc107;
+        }
+
+        .status.refunded {
+            color: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 200px;
+                padding: 15px;
+            }
+
+            .wallet-card {
+                width: 100%;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <h3>Account Menu</h3>
+        <a href="/" class="active">Home</a>
+        <a href="/my-account/details">My Details</a>
+        <a href="/my-address">My Address</a>
+        <a href="/my-orders">My Orders</a>
+        <a href="/my-wallet">Wallet</a>
+    </div>
+
+    <div class="main-content">
+        <div class="wallet-card">
+            <div class="wallet-title">My Wallet</div>
+            <div class="balance">Rs.<%= wallet && wallet.balance !== undefined ? wallet.balance : 0 %></div>
+            <div class="balance-info">Your total available balance</div>
+            <div class="wallet-footer">Powered by Your Company</div>
+        </div>
+    
+        <div class="container">
+            <h1>Transaction History</h1>
+            <table class="transaction-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Transaction Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (wallet && wallet.transaction && wallet.transaction.length > 0) { %>
+                        <% wallet.transaction.forEach((item, index) => { %>
+                            <tr>
+                                <td><%= index + 1 %></td>
+                                <td><%= new Date(item.Date).toDateString() %></td>
+                                <td>Rs. <%= item.amount %></td>
+                                <td class="status <%= item.type.toLowerCase() %>"><%= item.type %></td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: #777;">No transactions found.</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+</body>
+</html>

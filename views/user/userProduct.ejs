@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>MR_Watches</title>
+        <meta name="keywords" content="HTML5 Template">
+        <meta name="description" content="Molla - Bootstrap eCommerce Template">
+        <meta name="author" content="p-themes">
+        <!-- Favicon -->
+        <link rel="apple-touch-icon" sizes="180x180" href="assets/images/icons/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="assets/images/icons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="assets/images/icons/favicon-16x16.png">
+        <link rel="manifest" href="assets/images/icons/site.html">
+        <link rel="mask-icon" href="assets/images/icons/safari-pinned-tab.svg" color="#666666">
+        <link rel="shortcut icon" href="assets/images/icons/favicon.ico">
+        <meta name="apple-mobile-web-app-title" content="Molla">
+        <meta name="application-name" content="Molla">
+        <meta name="msapplication-TileColor" content="#cc9966">
+        <meta name="msapplication-config" content="assets/images/icons/browserconfig.xml">
+        <meta name="theme-color" content="#ffffff">
+        <link rel="stylesheet" href="assets/vendor/line-awesome/line-awesome/line-awesome/css/line-awesome.min.css">
+        <!-- Plugins CSS File -->
+        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/css/plugins/owl-carousel/owl.carousel.css">
+        <link rel="stylesheet" href="assets/css/plugins/magnific-popup/magnific-popup.css">
+        <link rel="stylesheet" href="assets/css/plugins/jquery.countdown.css">
+        <!-- Main CSS File -->
+        <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="stylesheet" href="assets/css/skins/skin-demo-6.css">
+        <link rel="stylesheet" href="assets/css/demos/demo-6.css">
+        <style>
+            .price-filter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+    font-family: Arial, sans-serif;
+    margin-top: 50px;
+
+}
+
+.price-filter input {
+    width: 80px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.price-filter button {
+    padding: 5px 15px;
+    border-radius: 5px;
+    background-color: #c96;;
+    color: white;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.price-filter button:hover {
+    background-color:#c96;;
+}
+
+.price-filter label {
+    font-weight: 600;
+    font-size: 14px;
+}
+.out-of-stock {
+    color: red;
+    font-weight:400;
+    text-transform: uppercase;
+    margin-left: 88px;
+}
+
+
+#sort-select {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    transition: border-color 0.3s ease;
+    margin-top: 50px;
+}
+
+#sort-select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.form-select {
+    display: inline-block;
+    width: 100%;
+}
+
+
+        </style>
+    </head>
+<body>
+    <div class="page-wrapper">
+        <header class="header header-6">
+            <div class="header-top">
+                <div class="container">
+                    <div class="header-left">
+                        <ul class="top-menu top-link-menu d-none d-md-block">
+                            <li>
+                                <a href="#">Links</a>
+                                <ul>
+                                    <li><a href="tel:#"><i class="icon-phone"></i>Call: +0123 456 789</a></li>
+                                </ul>
+                            </li>
+                        </ul><!-- End .top-menu -->
+                    </div><!-- End .header-left -->
+
+                    <div class="header-right">
+                        <div class="social-icons social-icons-color">
+                            <a href="#" class="social-icon social-facebook" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
+                            <a href="#" class="social-icon social-twitter" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
+                            <a href="#" class="social-icon social-pinterest" title="Instagram" target="_blank"><i class="icon-pinterest-p"></i></a>
+                            <a href="#" class="social-icon social-instagram" title="Pinterest" target="_blank"><i class="icon-instagram"></i></a>
+                        </div><!-- End .soial-icons -->
+                        <ul class="top-menu top-link-menu">
+                            <li>
+                                <a href="#">Links</a>
+                                <ul>
+                                    <% if (isLoggedIn) { %>
+                                       
+                                        <li><a href="/my-account"><i class="icon-user"></i> My Account</a></li>
+                                    <% } else { %>
+                                        
+                                        <li><a href="/login"><i class="icon-user"></i> Login</a></li>
+                                    <% } %>
+                                </ul>
+                                
+                                
+                            </li>
+                        </ul>
+
+                        <div class="header-dropdown">
+                            <a href="#">USD</a>
+                            <div class="header-menu">
+                                <ul>
+                                    <li><a href="#">Eur</a></li>
+                                    <li><a href="#">Usd</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="header-dropdown">
+                            <a href="#">Eng</a>
+                            <div class="header-menu">
+                                <ul>
+                                    <li><a href="#">English</a></li>
+                                    <li><a href="#">French</a></li>
+                                    <li><a href="#">Spanish</a></li>
+                                </ul>
+                            </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="header-middle">
+                <div class="container">
+                    <div class="header-left">
+                        <div class="header-search header-search-extended header-search-visible d-none d-lg-block">
+                            <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
+                            <form id="search-form">
+                                <div class="header-search-wrapper search-wrapper-wide">
+                                    <label for="q" class="sr-only">Search</label>
+                                    <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+                                    <input type="search" class="form-control" name="q" id="q" placeholder="Search product ..." required>
+                                </div><!-- End .header-search-wrapper -->
+                            </form>
+                        </div><!-- End .header-search -->
+                        
+                        
+                    </div>
+                    <div class="header-center">
+                        <a href="index.html" class="logo">
+                            <h2>MR WATCHES</h2>
+                        </a>
+                    </div><!-- End .header-left -->
+
+                    <div class="header-right">
+                        <a href="/wishlist" class="wishlist-link">
+                            <i class="icon-heart-o"></i>
+                            <span class="wishlist-txt">My Wishlist</span>
+                        </a>
+
+                        <div class="dropdown cart-dropdown">
+                            <a href="/cart" class="dropdown-toggle" >
+                                <i class="icon-shopping-cart"></i>
+                                <span class="cart-txt">My Cart</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    <%- include('../partials/navbar') %>
+
+    <div class="mb-6" style="text-align: center;">
+        <h2 style="margin: 0; margin-top: 20px;">ALL WATCHES</h2>
+    </div>
+
+   <!-- Filter Button -->
+<div>
+    <button id="open-filter-modal" class="btn btn-primary" style="padding: 10px 20px; border-radius: 5px; font-size: 14px; margin-left: 180vh;">
+        Filter
+    </button>
+</div>
+
+
+<!-- Modal -->
+<div id="filter-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center;">
+    <div class="modal-content" style="background: white; padding: 20px; border-radius: 10px; width: 300px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);">
+        <h4 style="margin-bottom: 20px; text-align: center;">Filter by Price</h4>
+        
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            <div>
+                <label for="min-price" style="font-weight: 600; margin-bottom: 5px; display: block;">Min Price:</label>
+                <input type="number" id="min-price" placeholder="Min" min="0" style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+            </div>
+            <div>
+                <label for="max-price" style="font-weight: 600; margin-bottom: 5px; display: block;">Max Price:</label>
+                <input type="number" id="max-price" placeholder="Max" min="0" style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+            </div>
+            
+            <!-- Vertically aligned buttons -->
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+                <!-- Apply Button -->
+                <button id="apply-filter" class="btn btn-primary" style="padding: 8px 16px; border-radius: 5px; font-size: 14px; width: 100%;">Apply</button>
+                
+                <!-- Close Button -->
+                <button id="close-filter-modal" class="btn btn-secondary" style="padding: 8px 16px; border-radius: 5px; font-size: 14px; width: 100%;">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-12">
+    <select id="sort-select" class="form-select" style="width: 200px;">
+        <option value="low-to-high">Price: Low to High</option>
+        <option value="high-to-low">Price: High to Low</option>
+    </select>
+</div>
+    
+    
+
+<div class="container">
+
+        <!-- No Products Message -->
+        <div id="no-products-message" style="display: none; color: red; margin-left: 65vh; font-style: normal; font-size: 24px; font-weight: bold;">
+            Sorry, no products.
+        </div>
+        <!-- Product List -->
+        <div id="product-list" class="row justify-content-center">
+           
+            
+            <% products.forEach(product => { %>
+                <!-- Product Item -->
+                <div class="col-6 col-md-4 col-lg-3 product-item" data-price="<%= product.offer ? product.discountedPrice : product.price %>">
+                    <div class="product product-7 text-center">
+                        <figure class="product-media" style="display: flex; flex-direction: column; align-items: center;">
+                            <% if (product.isOnSale || product.offer) { %>
+                                <span class="product-label label-sale">
+                                    <%= product.offer ? "Offer" : "Sale" %>
+                                </span>
+                            <% } %>
+                            <a href="/product/<%= product._id %>">
+                                <img src="<%= product.images[0] %>" alt="Product image" class="product-image">
+                                <img src="<%= product.images[0] %>" alt="Product image" class="product-image-hover">
+                            </a>
+                            <div class="product-action-vertical" data-product-id="<%= product._id %>">
+                                <a href="" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                            </div>
+                            <div class="product-action">
+                                <% if (Number(product.stock) > 0) { %>
+                                    <a href="#" class="btn-product btn-cart" data-product-id="<%= product._id %>" data-product-price="<%= product.offer ? product.discountedPrice : product.price %>">
+                                        <span>add to cart</span>
+                                    </a>
+                                <% } else { %>
+                                    <span class="out-of-stock">Out of Stock</span>
+                                <% } %>
+                            </div>
+                        </figure>
+                        <div class="product-body" style="text-align: center;">
+                            <h3 class="product-title">
+                                <a href="/product/<%= product._id %>"><%= product.name %></a>
+                            </h3>
+                            <div class="product-price">
+                                <% if (product.offer) { %>
+                                    <span class="new-price">Now Rs.<%= product.discountPrice.toFixed(2) %></span>
+                                    <span class="old-price">Was Rs.<%= product.price.toFixed(2) %></span>
+                                <% } else { %>
+                                    Rs.<%= product.price %>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+</div>
+
+
+    
+    
+    
+
+    <%- include('../partials/footer') %>
+    
+    
+
+</body>
+</html>
+
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
+<script>
+   
+    const userId = '<%= userId %>'; 
+
+    
+    document.querySelectorAll('.btn-cart').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();  
+            const productId = this.getAttribute('data-product-id');
+            const price = this.getAttribute('data-product-price');
+
+           
+            if (!userId) {
+                Swal.fire('Please log in to add products to your cart!', '', 'warning');
+                return;
+            }
+
+            
+            axios.post('/add-to-cart', {
+                userId: userId,
+                productId: productId,
+                price: price
+            })
+            .then(response => {
+                
+                Swal.fire('Success!', 'Product has been added to your cart.', 'success');
+            })
+            .catch(error => {
+               
+                Swal.fire('Oops!', 'Something went wrong!', 'error');
+            });
+        });
+    });
+</script>
+
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('q');
+    const productItems = document.querySelectorAll('.product-item');
+    const minPriceInput = document.getElementById('min-price');
+    const maxPriceInput = document.getElementById('max-price');
+    const filterButton = document.getElementById('filter-price');
+    const openFilterModalBtn = document.getElementById('open-filter-modal');
+    const filterModal = document.getElementById('filter-modal');
+    const closeFilterModalBtn = document.getElementById('close-filter-modal');
+    const applyFilterBtn = document.getElementById('apply-filter');
+    const noProductsMessage = document.getElementById('no-products-message'); 
+
+   
+    openFilterModalBtn.addEventListener('click', () => {
+        filterModal.style.display = 'flex';
+    });
+
+  
+    closeFilterModalBtn.addEventListener('click', () => {
+        filterModal.style.display = 'none';
+    });
+
+   
+    applyFilterBtn.addEventListener('click', function () {
+        filterProducts();
+        filterModal.style.display = 'none'; 
+    });
+
+  
+    searchInput.addEventListener('input', function () {
+        filterProducts();
+    });
+
+   
+    function filterProducts() {
+        const searchQuery = searchInput.value.toLowerCase();
+        const minPrice = parseFloat(minPriceInput.value) || 0; 
+        const maxPrice = parseFloat(maxPriceInput.value) || Infinity; 
+
+        let productsFound = false; 
+
+        productItems.forEach(function (item) {
+            const productName = item.querySelector('.product-title a').textContent.toLowerCase(); 
+            const productPrice = parseFloat(
+                item.querySelector('.product-price .new-price')?.textContent.replace('Rs.', '') || 
+                item.querySelector('.product-price')?.textContent.replace('Rs.', '')
+            );
+
+            const matchesSearch = productName.includes(searchQuery);
+            const matchesPrice = productPrice >= minPrice && productPrice <= maxPrice;
+
+            if (matchesSearch && matchesPrice) {
+                item.style.display = 'block';
+                productsFound = true; 
+            } else {
+                item.style.display = 'none'; 
+            }
+        });
+
+       
+        if (productsFound) {
+            noProductsMessage.style.display = 'none';
+        } else {
+            noProductsMessage.style.display = 'block';
+        }
+    }
+});
+</script>
+
+<script>
+    document.querySelectorAll(".btn-wishlist").forEach(button =>{
+        button.addEventListener("click", async function (event){
+
+            event.preventDefault()
+
+            const productId = event.target.closest('.product-action-vertical').dataset.productId;
+
+            try {
+                const response = await fetch("/addToWishlist", {
+                    method: "POST",
+                    headers: {
+                        "content-type": "application/json",
+                    },
+                    body: JSON.stringify({ productId })
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Added to Wishlist!',
+                        text: result.message,
+                        showConfirmButton: false,
+                        timer: 1500 
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: result.message || 'Failed to add product to wishlist'
+                    });
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'An error occurred. Please try again.'
+                });
+            }
+        })
+    })
+</script>
+
+
+<script>
+    document.getElementById('sort-select').addEventListener('change', function(event) {
+    const sortValue = event.target.value;
+    const productList = document.getElementById('product-list');
+    const products = Array.from(productList.getElementsByClassName('product-item'));
+
+    // Check if there are products to display
+    const noProductsMessage = document.getElementById('no-products-message');
+    if (products.length === 0) {
+        noProductsMessage.style.display = 'block'; // Show "No Products" message
+    } else {
+        noProductsMessage.style.display = 'none'; // Hide "No Products" message
+    }
+
+    // Sort products based on selected option
+    products.sort((a, b) => {
+        const priceA = parseFloat(a.getAttribute('data-price'));
+        const priceB = parseFloat(b.getAttribute('data-price'));
+
+        if (sortValue === 'low-to-high') {
+            return priceA - priceB;
+        } else if (sortValue === 'high-to-low') {
+            return priceB - priceA;
+        }
+        return 0;
+    });
+
+    // Reorder products in the DOM
+    products.forEach(product => productList.appendChild(product));
+});
+
+</script>

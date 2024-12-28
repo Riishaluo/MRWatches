@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Coupon</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: #fff;
+            height: 100vh;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .sidebar h1 {
+            font-size: 24px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            text-align: left;
+            width: 100%;
+        }
+
+        .sidebar a {
+            color: #fff;
+            text-decoration: none;
+            margin: 10px 0;
+            font-size: 16px;
+            transition: color 0.3s ease;
+            text-align: left;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            color: #007bff;
+        }
+
+        .container {
+            flex: 1;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        select:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        #error-message {
+            display: none;
+            color: red;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                text-align: center;
+                box-shadow: none;
+                border-bottom: 2px solid #ccc;
+            }
+
+            .container {
+                margin: 20px;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .btn {
+                font-size: 16px;
+            }
+        }
+    </style>
+
+</head>
+<body>
+    
+    <div class="sidebar">
+        <h1>MR WATCHES</h1>
+        <%- include('../partials/sidebar') %>
+    </div>
+
+
+    <div class="container">
+        <h1>Add New Coupon</h1>
+
+        <div id="error-message"></div>
+
+        <form action="/admin/coupon/add" method="POST" id="add-coupon-form">
+
+            <div class="form-group">
+                <label for="couponName">Coupon Name</label>
+                <input type="text" id="couponName" name="name" placeholder="Enter coupon name" >
+            </div>
+            
+            <div class="form-group">
+                <label for="couponCode">Coupon Code</label>
+                <input type="text" id="couponCode" name="code" placeholder="Enter unique coupon code" >
+            </div>
+            
+            <div class="form-group">
+                <label for="discountType">Discount Type</label>
+                <select id="discountType" name="discountType" required onchange="updateDiscountInput()">
+                    <option value="percentage">Percentage</option>
+                    <option value="fixed">Fixed Amount</option>
+                </select>
+            </div>
+            
+            <div class="form-group" id="discountValueGroup">
+                <label for="discountValue" id="discountLabel">Discount Value</label>
+                <input type="number" id="discountValue" name="discountValue" placeholder="Enter discount value" >
+            </div>
+            
+            <div class="form-group">
+                <label for="minDiscount">Minimum Discount</label>
+                <input type="number" id="minDiscount" name="minDiscount" placeholder="Enter minimum discount amount" >
+            </div>
+             
+            <div class="form-group">
+                <label for="startDate">Start Date</label>
+                <input type="date" id="startDate" name="startDate" >
+            </div>
+            
+            <div class="form-group">
+                <label for="expirationDate">Expiration Date</label>
+                <input type="date" id="expirationDate" name="expirationDate" >                
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn">Add Coupon</button>
+            </div>
+        </form>
+    </div>
+
+
+    <script>
+        function updateDiscountInput() {
+            const discountType = document.getElementById('discountType').value;
+            const discountLabel = document.getElementById('discountLabel');
+            const discountValue = document.getElementById('discountValue');
+
+            if (discountType === 'percentage') {
+                discountLabel.textContent = 'Discount Percentage';
+                discountValue.placeholder = 'Enter percentage value (0-100)';
+                discountValue.max = 100; 
+            } else if (discountType === 'fixed') {
+                discountLabel.textContent = 'Discount Amount';
+                discountValue.placeholder = 'Enter fixed amount';
+                discountValue.removeAttribute('max'); 
+            }
+        }
+
+        function showError(message) {
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+        function clearError() {
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.style.display = 'none';
+            errorMessage.textContent = '';
+        }
+
+        function validateForm(event) {
+            clearError();
+
+            const couponName = document.getElementById('couponName').value.trim();
+            const couponCode = document.getElementById('couponCode').value.trim();
+            const discountType = document.getElementById('discountType').value;
+            const discountValue = document.getElementById('discountValue').value;
+            const minDiscount = document.getElementById('minDiscount').value;
+            const startDate = document.getElementById('startDate').value;
+            const expirationDate = document.getElementById('expirationDate').value;
+
+            if (!couponName || !couponCode || !discountValue || !maxDiscount || !startDate || !expirationDate) {
+                showError('Please fill out all fields.');
+                event.preventDefault();
+                return false;
+            }
+
+            if (discountType === 'percentage' && (discountValue < 0 || discountValue > 100)) {
+                showError('Percentage discount must be between 0 and 100.');
+                event.preventDefault();
+                return false;
+            }
+
+            if (minDiscount < 0 ||  discountValue < 0) {
+                showError('Numeric fields must have positive values.');
+                event.preventDefault();
+                return false;
+            }
+
+            if (new Date(startDate) >= new Date(expirationDate)) {
+                showError('Expiration date must be after the start date.');
+                event.preventDefault();
+                return false;
+            }
+
+            return true;
+        }
+
+        document.getElementById('add-coupon-form').addEventListener('submit', validateForm);
+    </script>
+
+
+
+</body>
+</html>

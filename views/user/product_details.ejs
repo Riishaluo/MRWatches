@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>MR-Watches</title>
+    <meta name="keywords" content="HTML5 Template">
+    <meta name="description" content="Molla - Bootstrap eCommerce Template">
+    <meta name="author" content="p-themes">
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/icons/favicon-16x16.png">
+    <link rel="manifest" href="/assets/images/icons/site.html">
+    <link rel="mask-icon" href="/assets/images/icons/safari-pinned-tab.svg" color="#666666">
+    <link rel="shortcut icon" href="/assets/images/icons/favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="Molla">
+    <meta name="application-name" content="Molla">
+    <meta name="msapplication-TileColor" content="#cc9966">
+    <meta name="msapplication-config" content="/assets/images/icons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/plugins/owl-carousel/owl.carousel.css">
+    <link rel="stylesheet" href="/assets/css/plugins/magnific-popup/magnific-popup.css">
+
+
+
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/plugins/nouislider/nouislider.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevateZoom.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
+    <style>
+        .btn-product {
+            margin: auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            background-color: #ff6f61;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+
+        }
+
+
+        .btn-product:hover {
+            background-color: #ff4c3b;
+
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+
+        }
+
+
+        .btn-product:active {
+            transform: translateY(1px);
+
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
+
+        .btn-product:focus {
+            outline: 2px solid #ff6f61;
+
+        }
+
+
+        .btn-product span {
+            display: inline-block;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+
+        .magnified-view {
+            position: absolute;
+
+            border: 1px solid #ccc;
+            background-color: rgba(255, 255, 255, 0.9);
+            object-position: center;
+            z-index: 1000;
+            width: 350px;
+
+            height: 300px;
+
+            overflow: hidden;
+            display: none;
+            transition: opacity 0.3s ease-in-out;
+            right: 230px;
+
+            top: 350px;
+
+            background-size: contain;
+        }
+
+        .zoom-image {
+            cursor: crosshair;
+            width: 100%;
+
+            height: auto;
+        }
+
+        .image-thumbnails {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: nowrap;
+
+        }
+
+        .image-thumbnails img {
+            width: 80px;
+
+            height: 80px;
+
+            margin-right: 10px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 4px;
+
+            cursor: pointer;
+
+        }
+
+
+        .btn-wishlist {
+            margin-left: 278px;
+            padding: 3px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            width: 214px;
+            margin-top: 5px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .btn-wishlist {
+                width: 80%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .btn-wishlist {
+                width: 90%;
+                font-size: 14px;
+            }
+        }
+
+        .btn-wishlist:hover {
+            background-color: #218838;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-wishlist:active {
+            transform: translateY(1px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-wishlist:focus {
+            outline: 2px solid #28a745;
+        }
+
+        .btn-wishlist span {
+            display: inline-block;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <header class="header header-6">
+            <div class="header-top">
+                <div class="container">
+                    <div class="header-left">
+                        <ul class="top-menu top-link-menu d-none d-md-block">
+                            <li>
+                                <a href="#">Links</a>
+                                <ul>
+                                    <li><a href="tel:#"><i class="icon-phone"></i>Call: +0123 456 789</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="header-right">
+                        <div class="social-icons social-icons-color">
+                            <a href="#" class="social-icon social-facebook" title="Facebook" target="_blank"><i
+                                    class="icon-facebook-f"></i></a>
+                            <a href="#" class="social-icon social-twitter" title="Twitter" target="_blank"><i
+                                    class="icon-twitter"></i></a>
+                            <a href="#" class="social-icon social-pinterest" title="Instagram" target="_blank"><i
+                                    class="icon-pinterest-p"></i></a>
+                            <a href="#" class="social-icon social-instagram" title="Pinterest" target="_blank"><i
+                                    class="icon-instagram"></i></a>
+                        </div>
+                        <ul class="top-menu top-link-menu">
+                            <li>
+                                <a href="#">Links</a>
+                                <ul>
+                                    <% if (isLoggedIn) { %>
+                                        <li><a href="/my-account"><i class="icon-user"></i>My Account</a></li>
+                                        <% } else { %>
+                                            <li><a href="/login"><i class="icon-user"></i>Login</a></li>
+                                            <% } %>
+                                </ul>
+
+                            </li>
+                        </ul>
+
+                        <div class="header-dropdown">
+                            <a href="#">USD</a>
+                            <div class="header-menu">
+                                <ul>
+                                    <li><a href="#">Eur</a></li>
+                                    <li><a href="#">Usd</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="header-dropdown">
+                            <a href="#">Eng</a>
+                            <div class="header-menu">
+                                <ul>
+                                    <li><a href="#">English</a></li>
+                                    <li><a href="#">French</a></li>
+                                    <li><a href="#">Spanish</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="header-middle">
+                <div class="container">
+                    <div class="header-left">
+                        <div class="header-search header-search-extended header-search-visible d-none d-lg-block">
+                            <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
+                            <form action="#" method="get">
+                                <div class="header-search-wrapper search-wrapper-wide">
+                                    <label for="q" class="sr-only">Search</label>
+                                    <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+                                    <input type="search" class="form-control" name="q" id="q"
+                                        placeholder="Search product ..." required>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="header-center">
+                        <a href="index.html" class="logo">
+                            <h2>MR WATCHES</h2>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <%- include('../partials/navbar') %>
+
+
+
+                <div class="header-middle sticky-header">
+                    <div class="container">
+                        <div class="header-right">
+
+
+                            <a href="/wishlist">
+                                <i class="fas fa-heart"></i> Wishlist
+                            </a>
+
+                            
+
+                            <div class="dropdown cart-dropdown">
+                                <a href="/cart" class="dropdown-toggle" role="button" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false" data-display="static">
+                                    <i class="icon-shopping-cart"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <main class="main">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb" style="margin-left: 30px;">
+                            <li class="breadcrumb-item"><a href="/">Home</a></li>
+                            <li class="breadcrumb-item"><a href="/allWatches">All Watches</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                <%= product.name %>
+                            </li>
+                        </ol>
+                    </nav>
+
+                    <div class="product-detail-container" style="max-width: 800px; margin: auto; padding: 20px;">
+                        <h1 style="font-size: 2rem; margin-bottom: 10px; text-align: center;">
+                            <%= product.name %>
+                        </h1>
+
+                        <p style="font-size: 1.2rem; color: #777; margin-bottom: 20px; text-align: center;">
+                            Category:
+                            <% if (product.category) { %>
+                                <%= product.category.name %>
+                                    <% } else { %>
+                                        <span>Category not available</span>
+                                        <% } %>
+                        </p>
+
+
+                        <div class="product-details" style="text-align: center;">
+                            <div class="main-image" id="mainImageContainer"
+                                style="margin-bottom: 20px; display: flex; justify-content: center;">
+                                <img id="mainProductImage"
+                                    src="<%= product.images[0].startsWith('/') ? product.images[0] : '/' + product.images[0] %>"
+                                    alt="<%= product.name %>" class="zoom-image"
+                                    style="max-height: 300px; width: auto;">
+                            </div>
+                        </div>
+
+
+                        <div id="magnified-view" class="magnified-view" style="display: none;"></div>
+
+                        <div class="image-thumbnails d-flex justify-content-center gap-2 mb-3">
+                            <% product.images.forEach((image, index)=> { %>
+                                <img src="<%= image.startsWith('/') ? image : '/' + image %>"
+                                    alt="Preview <%= index + 1 %>"
+                                    onclick="document.getElementById('mainProductImage').src='<%= image.startsWith('/') ? image : '/' + image %>'"
+                                    class="thumbnail-img">
+                                <% }); %>
+                        </div>
+
+                        <style>
+                            .thumbnail-img {
+                                cursor: pointer;
+                                width: 80px;
+                                height: auto;
+                                border: 1px solid #ccc;
+                                border-radius: 4px;
+                            }
+                        </style>
+
+
+
+                        <div class="product-price"
+                            style="display: flex; justify-content: center; font-size: 1.5rem; color: #333; margin-bottom: 20px;">
+                            <% if (product.offer) { %>
+                                <span style="color: red;">Now Rs.<%= product.discountPrice %></span>
+                                <span style="text-decoration: line-through; color: #777; margin-left: 10px;">Was Rs.<%=
+                                        product.price %></span>
+                                <% } else { %>
+                                    Rs.<%= product.price %>
+                                        <% } %>
+                        </div>
+
+
+
+                        <div class="product-stock-status" style="margin-bottom: 20px; text-align: center;">
+                            <% if (stockStatus==='In Stock' ) { %>
+                                <p style="color: green;">Available: <%= product.stock %> units</p>
+                                <% } else if (stockStatus==='Low Stock' ) { %>
+                                    <p style="color: orange;">Low Stock: Only <%= product.stock %> left!</p>
+                                    <% } else if (stockStatus==='Sold Out' ) { %>
+                                        <p style="color: red; font-weight: bold;">Sold Out</p>
+                                        <% } else if (stockStatus==='Unavailable' ) { %>
+                                            <p style="color: gray; font-style: italic;">Currently Unavailable</p>
+                                            <% } %>
+                        </div>
+
+
+
+                        <div class="product-description"
+                            style="font-size: 1rem; color: #555; line-height: 1.5; text-align: center;">
+                            <p><strong>
+                                    <%= product.description %>
+                                </strong></p>
+                        </div>
+
+                        <br>
+
+                        <button class="btn-product btn-cart" data-product-id="<%= product._id %>"
+                            data-product-price="<%= product.isOnSale ? product.salePrice : product.price %>">
+                            <%= isInCart ? 'Go to Cart' : 'Add to Cart' %>
+                        </button>
+
+
+                        <button class="btn-wishlist" data-product-id="<%=product._id %>">
+                            <i class="fas fa-heart"></i> Add To Wishlist
+                        </button>
+
+                    </div>
+    </div>
+    </main>
+
+
+    <br>
+    <br>
+
+    <div class="tab-content" id="productTabContent">
+
+        <div class="tab-pane fade" id="product-details-tab" role="tabpanel" aria-labelledby="product-details-link">
+            <p>Product details content goes here.</p>
+        </div>
+
+
+
+
+
+        <h2 class="title text-center mb-4">You May Also Like</h2>
+
+        <div class="related-products">
+            <div class="row">
+                <% relatedProducts.forEach(product=> { %>
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <div class="product product-7 text-center">
+                            <figure class="product-media">
+                                <a href="/product/<%= product._id %>">
+                                    <img src="/<%= product.images[0] %>" alt="<%= product.name %>"
+                                        style="width: 100%; height: auto;">
+                                </a>
+                            </figure>
+                            <div class="product-body">
+                                <h3 class="product-title">
+                                    <a href="/product/<%= product._id %>">
+                                        <%= product.name %>
+                                    </a>
+                                </h3>
+                                <div class="product-price">
+                                    Rs.<%= product.price %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+    </div>
+    </main>
+
+
+    <%- include('../partials/footer') %>
+
+
+
+
+
+        <!-- Plugins JS File -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/jquery.hoverIntent.min.js"></script>
+        <script src="assets/js/jquery.waypoints.min.js"></script>
+        <script src="assets/js/superfish.min.js"></script>
+        <script src="assets/js/owl.carousel.min.js"></script>
+        <script src="assets/js/bootstrap-input-spinner.js"></script>
+
+
+        <!-- Main JS File -->
+        <script src="assets/js/main.js"></script>
+
+
+
+
+</body>
+
+</html>
+<script>
+    $(document).ready(function () {
+        const zoomLevel = 3;
+        const magnifiedView = $('#magnified-view');
+
+        $('.zoom-image').on('mouseenter', function (event) {
+            const img = $(this);
+            const imgWidth = img.width();
+            const imgHeight = img.height();
+
+            magnifiedView.css({
+                'background-image': 'url(' + img.attr('src') + ')',
+                'background-size': (imgWidth * zoomLevel) + 'px ' + (imgHeight * zoomLevel) + 'px',
+                'display': 'block'
+            });
+        }).on('mousemove', function (event) {
+            const img = $(this);
+            const x = event.pageX - img.offset().left;
+            const y = event.pageY - img.offset().top;
+
+            const bgPosX = (x * zoomLevel) - (magnifiedView.width() / 2);
+            const bgPosY = (y * zoomLevel) - (magnifiedView.height() / 2);
+
+            magnifiedView.css({
+                'background-position': `${-bgPosX}px ${-bgPosY}px`,
+            });
+        }).on('mouseleave', function () {
+            magnifiedView.hide();
+        });
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script>
+    document.querySelectorAll('.btn-cart').forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+
+            const productId = this.getAttribute('data-product-id');
+            const price = this.getAttribute('data-product-price');
+            const userId = '<%= userId %>';
+
+            if (this.innerText === 'Add to Cart') {
+                axios.post('/add-to-cart', {
+                    userId: userId,
+                    productId: productId,
+                    price: price
+                })
+                .then(response => {
+                    Swal.fire('Success!', 'Product has been added to your cart.', 'success');
+                    this.innerText = 'Go to Cart'; 
+                })
+                .catch(error => {
+                    Swal.fire('Oops!', 'Something went wrong!', 'error');
+                });
+            } else {
+                window.location.href = '/cart';
+            }
+        });
+    });
+</script>
+
+
+
+
+<script>
+    document.querySelectorAll(".btn-wishlist").forEach(button => {
+        button.addEventListener("click", async function (event) {
+            event.preventDefault()
+
+            try {
+                productId = this.getAttribute("data-product-id")
+
+                console.log(productId)
+
+                const response = await fetch("/addToWishlist", {
+                    method: "POST",
+                    headers: {
+                        "content-type": "application/json",
+                    },
+                    body: JSON.stringify({ productId })
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Added to Wishlist!',
+                        text: result.message,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: result.message || 'Failed to add product to wishlist'
+                    });
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'An error occurred. Please try again.'
+                });
+            }
+        })
+    }
+    )
+
+</script>

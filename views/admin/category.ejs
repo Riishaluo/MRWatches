@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MR Watches - Categories</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Global Styles */
+        body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f4f8;
+    margin: 0;
+    padding: 0;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 270px;
+    padding: 20px;
+    transition: margin-left 0.3s;
+}
+
+/* Dashboard Header */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.dashboard-header h2 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.dashboard-header div {
+    font-size: 16px;
+    color: #34495e;
+}
+
+/* Categories Section */
+.categories-section {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+    transition: transform 0.3s;
+}
+
+.categories-section:hover {
+    transform: translateY(-2px);
+}
+
+.categories-section h3 {
+    font-size: 22px;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+/* Button Styles */
+.action-buttons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.action-buttons button {
+    background-color: #3498db;
+    border: none;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+}
+
+.action-buttons button:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table thead {
+    background-color: #ecf0f1;
+}
+
+table thead th {
+    padding: 12px;
+    text-align: left;
+    color: #2c3e50;
+    font-weight: bold;
+    border-bottom: 2px solid #3498db;
+}
+
+table tbody tr {
+    border-bottom: 1px solid #dfe6e9;
+}
+
+table tbody tr:hover {
+    background-color: #f1f2f6;
+    transition: background 0.3s;
+}
+
+table tbody td {
+    padding: 12px;
+    color: #34495e;
+}
+
+table tbody td .category-actions {
+    display: flex;
+    gap: 15px;
+}
+
+table tbody td .category-actions a {
+    color: #3498db;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+table tbody td .category-actions a:hover {
+    color: #2980b9;
+}
+
+/* Button for List/Unlist */
+button[type="submit"] {
+    background-color: #3498db;
+    border: none;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+}
+
+button[type="submit"]:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 220px;
+    }
+
+    .dashboard-header h2 {
+        font-size: 24px;
+    }
+
+    table thead th,
+    table tbody td {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h1>MR WATCHES</h1>
+        <%- include('../partials/sidebar') %>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="dashboard-header">
+            <h2>Categories</h2>
+            <div>
+                <button class="language-switcher">English <i class="fas fa-chevron-down"></i></button>
+                <span>User: Rishal (Admin)</span>
+            </div>
+        </div>
+
+        <!-- Categories Section -->
+        <div class="categories-section">
+            <h3>Category List</h3>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button onclick="window.location.href='/admin/category/add'"><i class="fas fa-plus"></i> Add Category</button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Category ID</th>
+                        <th>Category Name</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% categories.forEach(category => { %>
+                    <tr>
+                        <td><%= category._id %></td>
+                        <td><%= category.name %></td>
+                        <td><%= category.isListed ? 'Listed' : 'Unlisted' %></td>
+                        <td>
+                            <div class="category-actions">
+                                <a href="/admin/category/<%= category._id %>/edit"><i class="fas fa-edit"></i> Edit</a>
+                                <!-- Toggle List/Unlist Status -->
+                                <form action="/admin/category/<%= category._id %>/toggle-listing" method="POST" style="display: inline;">
+                                    <button type="submit">
+                                        <i class="fas <%= category.isListed ? 'fa-eye-slash' : 'fa-eye' %>"></i>
+                                        <%= category.isListed ? 'Unlist' : 'List' %>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    <% }) %>
+                </tbody>
+                
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

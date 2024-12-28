@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/assets/login.css">
+</head>
+<body>
+    <h2>MR Watches</h2>
+    <div class="container" id="container">
+        <div class="form-container sign-in-container">
+            <form id="registerForm" action="/signup" method="post" onsubmit="return validateForm(event);">
+                <h1> Sign Up</h1>
+                <span id="error"><%= message %></span> 
+                <span>or use your account</span>
+                <input type="email" name="email" id="email" placeholder="Email"  />
+                <input type="password" name="password" id="password" placeholder="Password"  />
+                <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password"  />
+                <div id="error-message" class="error-message"></div> <!-- Error message container -->
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Welcome Back!</h1>
+                    <p>To keep connected with us please login with your personal info</p>
+                    <button class="ghost" id="signIn" onclick="window.location.href='/login';">Sign In</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Already Have an Account?</p>
+                    <button class="ghost" id="signIn" onclick="window.location.href='/login';">Sign In</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>-MR watches Official</p>
+    </footer>
+    
+    <script>
+        const error = document.getElementById('error');
+        if (error) {
+            setTimeout(() => {
+                error.innerHTML = "";
+            }, 5000);
+        }
+    
+        async function checkEmailExists(email) {
+            const response = await fetch('/api/check-email', { // Adjust the endpoint as necessary
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email })
+            });
+            
+            const data = await response.json();
+            return data.exists; // Assuming the response contains a property 'exists' which is true or false
+        }
+    
+        async function validateForm(event) {
+            // Prevent form submission
+            event.preventDefault();
+    
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
+            const errorMessage = document.getElementById('error-message');
+    
+            errorMessage.textContent = ''; // Clear previous messages
+    
+            // Check if any fields are empty
+            if (!email || !password || !confirmPassword) {
+                errorMessage.textContent = 'All fields are required.';
+                return false; // Prevent form submission
+            }
+    
+            // Validate email format
+            const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+            if (!emailPattern.test(email)) {
+                errorMessage.textContent = 'Please enter a valid email address.';
+                return false; 
+            }
+    
+            // Check password length
+            if (password.length < 6) {
+                errorMessage.textContent = 'Password must be at least 6 characters long.';
+                return false; 
+            }
+    
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                errorMessage.textContent = 'Passwords do not match.';
+                return false;
+            }
+            // If validation passes, submit the form
+            document.getElementById('registerForm').submit(); // Submit the form
+            return true; // Allow the form to submit
+        }
+    </script>
+    
+    
+</body>
+</html>
+

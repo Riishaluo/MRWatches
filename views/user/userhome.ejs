@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- molla/index-6.html  22 Nov 2019 09:56:18 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>MR_Watches</title>
+    <meta name="keywords" content="HTML5 Template">
+    <meta name="description" content="Molla - Bootstrap eCommerce Template">
+    <meta name="author" content="p-themes">
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/icons/favicon-16x16.png">
+    <link rel="manifest" href="assets/images/icons/site.html">
+    <link rel="mask-icon" href="assets/images/icons/safari-pinned-tab.svg" color="#666666">
+    <link rel="shortcut icon" href="assets/images/icons/favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="Molla">
+    <meta name="application-name" content="Molla">
+    <meta name="msapplication-TileColor" content="#cc9966">
+    <meta name="msapplication-config" content="assets/images/icons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="assets/vendor/line-awesome/line-awesome/line-awesome/css/line-awesome.min.css">
+    <!-- Plugins CSS File -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/plugins/owl-carousel/owl.carousel.css">
+    <link rel="stylesheet" href="assets/css/plugins/magnific-popup/magnific-popup.css">
+    <link rel="stylesheet" href="assets/css/plugins/jquery.countdown.css">
+    <!-- Main CSS File -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/skins/skin-demo-6.css">
+    <link rel="stylesheet" href="assets/css/demos/demo-6.css">
+    <style>
+.cart-button {
+    position: fixed;
+    top: 49px;   
+    right: 20px;  
+    z-index: 999;  
+}
+
+.cart-button .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0; 
+    background: none; 
+    border: none;  
+    color: #333; 
+    font-size: 30px;  
+    cursor: pointer;  
+    opacity: 1; 
+}
+
+.cart-button .icon-shopping-cart {
+    font-size: 30px;  
+}
+
+.cart-button .cart-item-count {
+    background-color: #c96;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 50%;
+    position: absolute;
+    top: -5px;
+    right: 1px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+    .cart-button .cart-item-count {
+        font-size: 10px;
+        padding: 4px;
+    }
+    .out-of-stock {
+    color: red;
+    font-weight:400;
+    text-transform: uppercase;
+    margin-left: 88px;
+}
+
+
+
+
+
+
+
+    </style>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <header class="header header-6">
+            <div class="header-top">
+                <div class="container">
+                    <div class="header-left">
+                        <ul class="top-menu top-link-menu d-none d-md-block">
+                            <li>
+                                <a href="#">Links</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="header-right">
+                        <ul class="top-menu top-link-menu">
+                            <li>
+                                <a href="#">Links</a>
+                                <ul>
+                                    <% if (isLoggedIn) { %>
+                                        <li><a href="/my-account/details"><i class="icon-user"></i>My Account</a></li>
+                                    <% } else { %>
+                                        <li><a href="/login"><i class="icon-user"></i>Login</a></li>
+                                    <% } %>
+                                </ul>
+                                
+                            </li>
+                        </ul>
+
+                      
+                        <div class="header-dropdown">
+                            <a href="#">Eng</a>
+                            <div class="header-menu">
+                                <ul>
+                                    <li><a href="#">English</a></li>
+                                    <li><a href="#">French</a></li>
+                                    <li><a href="#">Spanish</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="header-middle">
+                <div class="container">
+                    <div class="header-left">
+                    </div>
+                    <div class="header-center">
+                        <a href="index.html" class="logo">
+                            <h2>MR WATCHES</h2>
+                        </a>
+                    </div>
+
+                    <div class="header-right">
+                        <a href="/wishlist" class="wishlist-link">
+                            <i class="icon-heart-o"></i>
+                            <span class="wishlist-txt">My Wishlist</span>
+                        </a>
+                        <div class="cart-button">
+                            <a href="/cart" class="btn btn-outline-dark">
+                                <i class="icon-shopping-cart"></i>
+                                <span class="cart-txt">My Cart</span>
+                            </a>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+
+            
+           
+            <%- include('../partials/navbar') %>
+            
+
+        <main class="main">
+            <div class="intro-slider-container">
+                <div class="intro-slider owl-carousel owl-theme owl-nav-inside owl-light" data-toggle="owl" data-owl-options='{
+                        "dots": false,
+                        "nav": false, 
+                        "responsive": {
+                            "992": {
+                                "nav": true
+                            }
+                        }
+                    }'>
+                    <div class="intro-slide" style="background-image: url('assets/images/homebanner4.jpg');">
+                        <div class="container intro-content text-center" style="display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center;">
+                            <h1 class="intro-title text-white" style="margin: 0;">SOMETHING NEW ?</h1>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="intro-slide" style="background-image: url(/assets/images/homebanner5.jpg);">
+                        <div class="container intro-content text-center" style="display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center;">
+                            <h1 class="intro-title text-white" style="margin: 0;">YOU ARE HERE</h1>
+                        </div>                        
+                    </div>
+                </div>
+
+                <span class="slider-loader"></span>
+            </div>
+
+            <div class="pt-2 pb-3">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="banner banner-overlay">
+                                <a href="#">
+                                    <img src="/assets/images/newinwomen2.webp" alt="Banner">
+                                </a>
+                                <div class="banner-content banner-content-center">
+                                    <h4 class="banner-subtitle text-white"><a href="#">New in</a></h4>
+                                    <h3 class="banner-title text-white"><a href="#"><strong>Women’s</strong></h3>
+                                    <a href="#" class="btn btn-outline-white banner-link underline">Shop Now</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="banner banner-overlay">
+                                <a href="#">
+                                    <img src="/assets/images/newinmen2.jpg" alt="Banner">
+                                </a>
+                                <div class="banner-content banner-content-center">
+                                    <h4 class="banner-subtitle text-white"><a href="#">New in</a></h4>
+                                    <h3 class="banner-title text-white"><a href="#"><strong>Men’s</strong></a></h3>
+                                    <a href="#" class="btn btn-outline-white banner-link underline">Shop Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-6" style="text-align: center;">
+                <h2 style="margin: 0; margin-top: 20px;">NEW ARRIVAL</h2>
+            </div>
+        
+            <div class="container">
+    <div class="products" style="display: flex; flex-direction: column; height: 100%;">
+        <div class="row justify-content-center" style="flex-grow: 1; display: flex; justify-content: center; flex-wrap: wrap;">
+            <% products.forEach(product => { %>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="product product-7 text-center">
+                        <!-- Product Media -->
+                        <figure class="product-media" style="display: flex; flex-direction: column; align-items: center;">
+                            <% if (product.isOnSale) { %>
+                                <span class="product-label label-sale">Sale</span>
+                            <% } %>
+                            <a href="/product/<%= product._id %>">
+                                <img src="<%= product.images[0] %>" alt="Product image" class="product-image">
+                                <img src="<%= product.images[0] %>" alt="Product image" class="product-image-hover">
+                            </a>
+                            <div class="product-action-vertical" data-product-id="<%= product._id %>">
+                                <a href="#" class="btn-product-icon btn-wishlist btn-expandable">
+                                    <span>add to wishlist</span>
+                                </a>
+                            </div>
+                            <div class="product-action">
+                                <% if (Number(product.stock) > 0) { %>
+                                    <a href="#" 
+                                       class="btn-product btn-cart" 
+                                       data-product-id="<%= product._id %>" 
+                                       data-product-price="<%= product.isOnSale ? product.salePrice : product.price %>">
+                                        <span>add to cart</span>
+                                    </a>
+                                <% } else { %>
+                                    <span class="out-of-stock">Out of Stock</span>
+                                <% } %>
+                            </div>
+                        </figure>
+
+                        <!-- Product Body -->
+                        <div class="product-body" style="text-align: center;">
+                            <h3 class="product-title">
+                                <a href="/product/<%= product._id %>"><%= product.name %></a>
+                            </h3>
+                            <div class="product-price">
+                                <% if (product.offer) { %>
+                                    <span class="new-price">Now Rs.<%= product.discountPrice.toFixed(2) %></span>
+                                    <span class="old-price">Was Rs.<%= product.price.toFixed(2) %></span>
+                                <% } else { %>
+                                    Rs.<%= product.price %>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+</div>
+
+            
+
+
+            <div class="pt-4 pb-3" style="background-color: #222; display: flex; justify-content: center; align-items: center; height: 100%;">
+                <div class="container" style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                    <div class="row justify-content-center" style="display: flex; justify-content: center; align-items: center;">
+                        <div class="col-lg-3 col-sm-6" style="text-align: center;">
+                            <div class="icon-box text-center">
+                                <span class="icon-box-icon" style="color: #b5941b;">
+                                    <i class="icon-truck"></i>
+                                </span>
+                                <div class="icon-box-content">
+                                    <h3 class="icon-box-title" style="color: #b5941b;">Payment & Delivery</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6" style="text-align: center;">
+                            <div class="icon-box text-center">
+                                <span class="icon-box-icon" style="color: #b5941b;">
+                                    <i class="icon-rotate-left"></i>
+                                </span>
+                                <div class="icon-box-content">
+                                    <h3 class="icon-box-title" style="color: #b5941b;">Return & Refund</h3>
+                                    <p>Free 100% money back guarantee</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6" style="text-align: center;">
+                            <div class="icon-box text-center">
+                                <span class="icon-box-icon" style="color: #b5941b;">
+                                    <i class="icon-unlock"></i>
+                                </span>
+                                <div class="icon-box-content">
+                                    <h3 class="icon-box-title" style="color: #b5941b;">Secure Payment</h3>
+                                    <p>100% secure payment</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6" style="text-align: center;">
+                            <div class="icon-box text-center">
+                                <span class="icon-box-icon" style="color: #b5941b;">
+                                    <i class="icon-headphones"></i>
+                                </span>
+                                <div class="icon-box-content">
+                                    <h3 class="icon-box-title" style="color: #b5941b;">Quality Support</h3>
+                                    <p>Always online feedback 24/7</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+            <%- include('../partials/footer') %>
+              
+</body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script>
+    document.querySelectorAll('.btn-cart').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+
+            const productId = this.getAttribute('data-product-id');
+            const price = this.getAttribute('data-product-price');
+            const userId = '<%= userId %>';  
+
+            
+            axios.post('/add-to-cart', {
+                userId: userId,
+                productId: productId,
+                price: price
+            })
+            .then(response => {
+                console.log(response)
+                Swal.fire('Success!', 'Product has been added to your cart.', 'success');
+            })
+            .catch(error => {
+                Swal.fire('Oops!', 'Something went wrong!', 'error');
+            });
+        });
+    });
+</script>
+
+
+<!-- wishlist -->
+<script>
+    document.querySelectorAll(".btn-wishlist").forEach(button => {
+        button.addEventListener("click", async (e) => {
+            e.preventDefault();
+
+            const productId = e.target.closest('.product-action-vertical').dataset.productId;
+            console.log(productId);
+
+            try {
+                const response = await fetch("/addToWishlist", {
+                    method: "POST",
+                    headers: {
+                        "content-type": "application/json",
+                    },
+                    body: JSON.stringify({ productId })
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Added to Wishlist!',
+                        text: result.message,
+                        showConfirmButton: false,
+                        timer: 1500 
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: result.message || 'Failed to add product to wishlist'
+                    });
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'An error occurred. Please try again.'
+                });
+            }
+        });
+    });
+</script>

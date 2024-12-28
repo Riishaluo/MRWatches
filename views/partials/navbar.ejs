@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        li.megamenu-container a {
+            text-decoration: none;
+            /* Removes the underline */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header-bottom sticky-header" style="text-align: center;">
+        <div class="container" style="display: flex; justify-content: center;">
+            <div class="header-left" style="display: flex; justify-content: center;">
+                <nav class="main-nav">
+                    <ul class="menu" style="list-style: none; padding: 0; margin: 0; display: flex;">
+                        <li class="megamenu-container active" style="margin: 0 15px;">
+                            <a href="/" style="text-decoration: none;">Home</a>
+                        </li>
+                        <li style="margin: 0 15px;">
+                            <a href="/allWatches">ALL WATCHES</a>
+                        </li>
+                        <!-- Iterate over the filtered displayCategories -->
+                        <% displayCategories.forEach(category=> { %>
+                            <li style="margin: 0 15px;">
+                                <a href="/category/<%= category.name.toLowerCase() %>">
+                                    <%= category.name %>
+                                </a>
+                            </li>
+                            <% }) %>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

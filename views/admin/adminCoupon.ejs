@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Coupons</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .add-coupon-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .add-coupon-btn:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover td {
+            background-color: #eaf1e9;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        a:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .no-coupons {
+            text-align: center;
+            font-size: 18px;
+            color: #999;
+            margin-top: 30px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .actions a {
+            margin-right: 10px;
+        }
+        /* Common Styles for Links and Buttons */
+.action-btn {
+    color: #007bff;
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+    background: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Hover Effect */
+.action-btn:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>All Coupons</h1>
+
+        <!-- Add Coupon Button -->
+        <a href="/admin/adminAddCoupon" class="add-coupon-btn">Add Coupon</a>
+        
+        <% if (coupons.length > 0) { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Code</th>
+                        <th>Discount Type</th>
+                        <th>Discount Value</th>
+                        <th>Start Date</th>
+                        <th>Expiration Date</th>
+                        <th>Minimum</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% coupons.forEach(coupon => { %>
+                        <tr>
+                            <td><%= coupon.name %></td>
+                            <td><%= coupon.code %></td>
+                            <td><%= coupon.discountType %></td>
+                            <td><%= coupon.discountValue %></td>
+                            <td><%= new Date(coupon.startDate).toLocaleDateString('en-GB') %></td>
+                            <td><%= new Date(coupon.expirationDate).toLocaleDateString('en-GB') %></td>
+                            <td><%=coupon.minDiscount%></td>
+                            <td class="actions">
+                                <a href="/admin/coupon/edit/<%= coupon._id %>">Edit</a>
+                                <button class="action-btn" onclick="confirmDelete('<%= coupon._id %>')">Delete</button>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p class="no-coupons">No coupons available.</p>
+        <% } %>
+    </div>
+
+</body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+   function confirmDelete(couponId) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/admin/coupon/delete/${couponId}`, {
+                method: 'GET'
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        Swal.fire(
+                            'Deleted!',
+                            'The coupon has been deleted.',
+                            'success'
+                        ).then(() => {
+                            window.location.reload(); 
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            'There was an issue deleting the coupon.',
+                            'error'
+                        );
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    Swal.fire(
+                        'Error!',
+                        'An unexpected error occurred.',
+                        'error'
+                    );
+                });
+        }
+    });
+}
+
+</script>
