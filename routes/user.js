@@ -45,6 +45,9 @@ router.get('/allWatches',userProductController.renderAllWatches);
 router.get('/product/:id',checkBlockedUser,userProductController.renderProductDetails);
 router.get('/category/:categoryName', userProductController.renderCategoryPage);
 
+//logout
+
+router.get('/logout', userController.logout);
 
 //forgotpasss
 
