@@ -17,9 +17,7 @@ try{
 }catch(error){
     console.log("No product is found")
 }
-   
 }
-  
 
 //multer
   const storage = multer.diskStorage({

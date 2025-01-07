@@ -247,8 +247,9 @@
                                 'Deleted!',
                                 'The offer has been deleted.',
                                 'success'
-                            );
-                            button.closest('tr').remove();
+                            ).then(() => {
+                                window.location.reload();
+                            });
                         })
                         .catch(error => {
                             console.error('Error deleting offer:', error);

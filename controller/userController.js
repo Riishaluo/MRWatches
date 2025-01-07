@@ -3,12 +3,14 @@ const Category = require("../model/categoryModel");
 const Product = require("../model/productModel")
 const OTP = require('../model/otpSchema');
 const Offer = require("../model/offerModel")
+const passport = require('passport');
 
 
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 const saltRounds = 10; 
+const STATIC_PASSWORD = "google123";
 
 // Render login page
 exports.renderLoginPage = (req, res) => {
@@ -147,6 +149,10 @@ async function sendOtp(email) {
         otp += digits[Math.floor(Math.random() * digits.length)];
     }
 
+    
+    console.log(process.env.EMAIL)
+    console.log( process.env.APP_PASS_KEY)
+
     console.log(`Generated OTP: ${otp}`);
 
     let transporter = nodemailer.createTransport({
@@ -154,8 +160,9 @@ async function sendOtp(email) {
         auth: {
             user: process.env.EMAIL,
             pass: process.env.APP_PASS_KEY,
-        },
+         },
     });
+
 
     let mailOptions = {
         from: process.env.EMAIL,
@@ -179,7 +186,7 @@ async function sendOtp(email) {
             otp: otp,
             exprTime: exprTime,
         });
-        console.log(otpEntry);
+      
         
         await otpEntry.save();
     } catch (error) {
@@ -521,6 +528,49 @@ exports.resendForgotOtp = async (req, res) => {
         res.redirect('/verify-forgot-otp');
     }
 };
+
+
+exports.googleAuth = passport.authenticate('google', { scope: ['profile', 'email'] });
+
+exports.googleAuthCallback = (req, res, next) => {
+    passport.authenticate('google', async (err, user, info) => {
+        if (err) return next(err);
+
+        try {
+            let existingUser = await User.findOne({ googleId: user.googleId });
+            if (!existingUser) {
+                const email = user.email;
+                existingUser = await User.findOne({ email });
+
+                if (existingUser) {
+                    if (!existingUser.googleId) {
+                        existingUser.googleId = user.googleId;
+                        await existingUser.save();
+                    } else {
+                        return res.status(400).send('This email is already associated with another Google account.');
+                    }
+                } else {
+                    const hashedPassword = await bcrypt.hash(STATIC_PASSWORD, 10);
+                    existingUser = new User({
+                        googleId: user.googleId,
+                        email,
+                        password: hashedPassword,
+                    });
+                    await existingUser.save();
+                }
+            }
+
+            req.session.userId = existingUser._id;
+            req.session.isLoggedIn = true;
+
+            res.redirect('/');
+        } catch (err) {
+            console.error("Error in Google OAuth callback:", err);
+            res.status(500).send("Internal Server Error");
+        }
+    })(req, res, next);
+};
+
 
 
 exports.logout = async (req,res)=>{

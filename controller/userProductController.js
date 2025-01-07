@@ -215,6 +215,7 @@ exports.renderCategoryPage = async (req, res) => {
 
         if (!category) {
             return res.render('user/filterCategory', {
+                userId,
                 message: 'Category not found',
                 products: [],
                 displayCategories: await Category.find(),

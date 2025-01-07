@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
+
+    
     <div class="container mt-5">
         <h1 class="text-center mb-4"><%= category ? 'Edit' : 'Add' %> Category</h1>
 
@@ -24,9 +26,11 @@
 
             <div class="form-group">
                 <label for="name">Category Name:</label>
-                <input type="text" id="name" name="name" class="form-control" value="<%= category ? category.name : '' %>" >
+                <input type="text" id="name" name="name" class="form-control" value="<%= category ? category.name : '' %>">
+                <small id="nameError" class="text-danger" style="display: none;">Enter a valid category name</small>
             </div>
-            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            <button type="submit" class="btn btn-primary btn-block" onclick="return validateCategoryName()">Submit</button>
+            
 
             <% if (category) { %>
                 <form action="/admin/category/<%= category._id %>/delete" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this category?');">
@@ -44,3 +48,21 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+
+
+
+<script>
+    function validateCategoryName() {
+        const nameInput = document.getElementById('name').value.trim();
+        const errorElement = document.getElementById('nameError');
+        
+        if (!nameInput) {
+            errorElement.style.display = "block";
+            errorElement.textContent = "Enter a valid category name";
+            return false; // Prevent form submission
+        } else {
+            errorElement.style.display = "none";
+            return true; // Allow form submission
+        }
+    }
+</script>

@@ -10,6 +10,7 @@ const adminRoutes = require("./routes/admin")
 const Razorpay = require('razorpay');
 const flash = require('connect-flash');
 const app = express();
+const passport = require('./controller/passportConfig');
 
 const dbURI = process.env.DB_URI;
 // Connect to MongoDB
@@ -31,7 +32,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.static('public')); 
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 app.use(nocache());
@@ -45,6 +46,9 @@ app.use(session({
         maxAge: 3600000,
     }
 }));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(flash());
 

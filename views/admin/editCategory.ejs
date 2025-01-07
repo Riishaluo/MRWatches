@@ -21,15 +21,18 @@
 
     <div class="container">
         <h1>Edit Category</h1>
+    
         <% if (error) { %>
             <div class="alert alert-danger">
                 <%= error %>
             </div>
         <% } %>
-        <form action="/admin/category/<%= category._id %>" method="POST">
+    
+        <form id="editCategoryForm" action="/admin/category/<%= category._id %>" method="POST" onsubmit="return validateCategoryName();">
             <div class="form-group">
                 <label for="categoryName">Category Name</label>
                 <input type="text" class="form-control" id="categoryName" name="name" value="<%= category.name %>" required>
+                <small id="nameError" class="text-danger" style="display: none;">Enter a valid category name</small>
             </div>
             <button type="submit" class="btn btn-primary">Save Changes</button>
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete</button>
@@ -39,3 +42,19 @@
 </body>
 </html>
  
+
+<script>
+    function validateCategoryName() {
+        const nameInput = document.getElementById('categoryName').value.trim();
+        const errorElement = document.getElementById('nameError');
+
+        if (!nameInput) {
+            errorElement.style.display = "block";
+            errorElement.textContent = "Enter a valid category name";
+            return false; 
+        } else {
+            errorElement.style.display = "none";
+            return true; 
+        }
+    }
+</script>

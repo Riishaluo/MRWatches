@@ -45,6 +45,11 @@ router.get('/allWatches',userProductController.renderAllWatches);
 router.get('/product/:id',checkBlockedUser,userProductController.renderProductDetails);
 router.get('/category/:categoryName', userProductController.renderCategoryPage);
 
+
+//google auth 
+router.get('/auth/google', userController.googleAuth);
+router.get('/auth/google/callback', userController.googleAuthCallback);
+
 //logout
 
 router.get('/logout', userController.logout);
