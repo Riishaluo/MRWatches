@@ -536,21 +536,15 @@ exports.googleAuthCallback = (req, res, next) => {
 
         try {
             if (!user) {
-                // Handle cases where user is null
                 return res.status(401).send("Authentication failed. User not found.");
             }
 
             if (user.isBlocked) {
-                // Handle blocked users
                 return res.status(403).send("Your account is blocked. Please contact support.");
             }
-
-            // Set session variables for the authenticated user
             req.session.userId = user._id;
             req.session.isLoggedIn = true;
-            req.session.isGoogleLogin = user.isGoogleLogin || false; // Optional: Track Google login status
-
-            // Redirect to home or dashboard
+            req.session.isGoogleLogin = user.isGoogleLogin || false; 
             res.redirect('/');
         } catch (err) {
             console.error("Error in Google OAuth callback:", err);
