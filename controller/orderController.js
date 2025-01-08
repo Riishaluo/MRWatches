@@ -4,8 +4,7 @@ const Address = require('../model/addressModel');
 const Cart = require('../model/cartModel');
 const Product = require("../model/productModel")
 const Razorpay = require("razorpay")
-const crypto  = require("crypto")
-const ITEMS_PER_PAGE = 5;
+const crypto = require("crypto")
 const Coupon = require("../model/couponModel")
 const Wallet = require("../model/walletModel")
 require('dotenv').config();
@@ -24,7 +23,7 @@ exports.placeOrder = async (req, res) => {
     }
 
     const { selectedAddressId, paymentMethod, name, street, city, state, zip, phone, paymentStatus, orderId } = req.body;
-    const finalOrderId = orderId ||`order-${Date.now()}`
+    const finalOrderId = orderId || `order-${Date.now()}`
     const address = selectedAddressId !== 'custom' ? await Address.findById(selectedAddressId) : null;
 
     if (!selectedAddressId || (selectedAddressId !== 'custom' && !address)) {
@@ -32,7 +31,7 @@ exports.placeOrder = async (req, res) => {
     }
 
     let totalPrice = cart.products.reduce((total, item) => {
-        return total + ((item.price * item.quantity)); 
+        return total + ((item.price * item.quantity));
     }, 0);
 
     if (paymentMethod === "cash_on_delivery" && totalPrice < 1000) {
@@ -87,8 +86,8 @@ exports.placeOrder = async (req, res) => {
             await coupon.save();
         }
     }
-    
-    const finalPaymentStatus = paymentStatus || 'pending'; 
+
+    const finalPaymentStatus = paymentStatus || 'pending';
 
     const order = new Order({
         userId,
@@ -98,12 +97,12 @@ exports.placeOrder = async (req, res) => {
             quantity: item.quantity
         })),
         paymentMethod,
-        paymentStatus: finalPaymentStatus, 
+        paymentStatus: finalPaymentStatus,
         status: 'pending',
         orderId: finalOrderId,
         totalPrice,
         coupon: coupon ? coupon._id : null,
-        couponApplied, 
+        couponApplied,
         createdAt: new Date()
     });
 
@@ -120,17 +119,12 @@ exports.placeOrder = async (req, res) => {
 
 
 exports.getUserOrders = async (req, res) => {
-
-    const currentPage = parseInt(req.query.page) || 1
-    const totalOrders = await Order.countDocuments()
-    const totalPages = Math.ceil(totalOrders/ITEMS_PER_PAGE)
-
     const userId = req.session.userId
-    
-    const orders = await Order.find({ userId }).populate("address").populate("cartItems.product").sort({ createdAt: -1 }).skip((currentPage -1)*ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
+
+    const orders = await Order.find({ userId }).populate("address").populate("cartItems.product").sort({ createdAt: -1 })
 
     if (orders) {
-        return res.render("user/orderList", { order: orders , currentPage,totalPages });
+        return res.render("user/orderList", { order: orders });
     }
 }
 
@@ -208,30 +202,30 @@ exports.cancelOrder = async (req, res) => {
 };
 
 
-exports.orderDetailed = async (req,res)=>{
-    try{
-       const  {orderId} = req.params
-       const order = await Order.findById(orderId)
-        .populate('userId')            
-        .populate('cartItems.product') 
-        .populate('coupon')
-      
+exports.orderDetailed = async (req, res) => {
+    try {
+        const { orderId } = req.params
+        const order = await Order.findById(orderId)
+            .populate('userId')
+            .populate('cartItems.product')
+            .populate('coupon')
 
-       if(!order){
-        return res.status(404).json({message:"order not found"})
-       }
 
-       let couponDiscount = 0;
-       if (order.coupon) {
-           if (order.coupon.discountType === 'percentage') {
-               couponDiscount = (order.coupon.discountValue / 100) * order.totalPrice;
-           } else if (order.coupon.discountType === 'fixed') {
-               couponDiscount = order.coupon.discountValue;
-           }
-       };        
+        if (!order) {
+            return res.status(404).json({ message: "order not found" })
+        }
 
-       return res.render("user/orderDetailed",{order,couponDiscount})
-    }catch(error){
+        let couponDiscount = 0;
+        if (order.coupon) {
+            if (order.coupon.discountType === 'percentage') {
+                couponDiscount = (order.coupon.discountValue / 100) * order.totalPrice;
+            } else if (order.coupon.discountType === 'fixed') {
+                couponDiscount = order.coupon.discountValue;
+            }
+        };
+
+        return res.render("user/orderDetailed", { order, couponDiscount })
+    } catch (error) {
         console.log(error)
         res.status(500).send('Server error');
     }
@@ -257,12 +251,12 @@ exports.returnOrder = async (req, res) => {
         const updateStockPromises = order.cartItems.map(async (item) => {
             const product = await Product.findById(item.product._id);
             if (product) {
-                product.stock += item.quantity; 
+                product.stock += item.quantity;
                 return product.save();
             }
         });
-        await Promise.all(updateStockPromises); 
-      
+        await Promise.all(updateStockPromises);
+
         await order.save();
 
         return res.status(200).json({ success: true, message: 'Order return initiated successfully' });
@@ -277,29 +271,29 @@ exports.returnOrder = async (req, res) => {
 
 
 //razorpay
-const razorpay = new Razorpay ({
-    key_id : "rzp_test_ULiN3Z9C2M5zyq",
-    key_secret : "XS57sRiXC907AyNP9sNdeqTS"
+const razorpay = new Razorpay({
+    key_id: "rzp_test_ULiN3Z9C2M5zyq",
+    key_secret: "XS57sRiXC907AyNP9sNdeqTS"
 })
 
 
 exports.createOrder = async (req, res) => {
-    
-    
+
+
     try {
         const { amount } = req.body;
 
         console.log(amount);
-        
+
         const options = {
-            amount:  amount * 100,
+            amount: amount * 100,
             currency: 'INR',
-            receipt: `receipt_${new Date().getTime()}`,  
+            receipt: `receipt_${new Date().getTime()}`,
         };
 
         const order = await razorpay.orders.create(options);
         console.log(order);
-        
+
         res.status(200).json({
             orderId: order.id,
             amount: order.amount,
@@ -361,17 +355,17 @@ exports.downloadInvoice = async (req, res) => {
         doc.fontSize(18).text('Invoice', { align: 'center' });
         doc.moveDown()
 
-        
+
         doc.fontSize(12).text(`Order ID: ${genOrder}`);
         doc.text(`Date: ${new Date(order.createdAt).toLocaleDateString()}`)
         doc.moveDown();
 
-    
+
         doc.text(`Customer ID: ${order.userId}`);
 
         doc.moveDown();
 
-              const tableTop = doc.y;
+        const tableTop = doc.y;
         const columnWidths = { index: 50, product: 200, quantity: 100, price: 100 };
         const columnSpacing = 10;
 
@@ -381,12 +375,12 @@ exports.downloadInvoice = async (req, res) => {
             .text('Quantity', 50 + columnWidths.index + columnWidths.product + columnSpacing * 2, tableTop, { width: columnWidths.quantity, align: 'center' })
             .text('Price', 50 + columnWidths.index + columnWidths.product + columnWidths.quantity + columnSpacing * 3, tableTop, { width: columnWidths.price, align: 'right' });
 
-      
+
         const headerBottom = tableTop + 20;
         doc.moveTo(50, tableTop - 5).lineTo(550, tableTop - 5).stroke();
         doc.moveTo(50, headerBottom).lineTo(550, headerBottom).stroke();
 
-     
+
         let y = headerBottom + 10;
         order.cartItems.forEach((item, index) => {
             if (item.product) {
@@ -402,7 +396,7 @@ exports.downloadInvoice = async (req, res) => {
             }
         });
 
-  
+
         doc.moveTo(50, y).lineTo(550, y).stroke();
 
         y += 10;

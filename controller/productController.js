@@ -9,20 +9,34 @@ const path = require("path")
 
 
 
-exports.getProducts = async (req,res)=>{
-try{
-    const products = await Product.find().populate("category")
-    const categories = await Category.find()
-    res.render("admin/product",{products,categories})
-}catch(error){
-    console.log("No product is found")
-}
+exports.getProducts = async (req, res) => {
+    try {
+
+        const page = parseInt(req.query.page) || 1
+        const limit = parseInt(req.query.limit) || 10
+        const skip = (page - 1) * limit
+
+
+        const products = await Product.find().populate("category").skip(skip).limit(limit)
+        const categories = await Category.find()
+
+
+        const totalProducts = await Product.countDocuments();
+
+
+        res.render("admin/product", {
+            products, categories, currentPage: page,
+            totalPages: Math.ceil(totalProducts / limit),
+        })
+    } catch (error) {
+        console.log("No product is found")
+    }
 }
 
 //multer
-  const storage = multer.diskStorage({
+const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        
+
         const uploadPath = path.join(__dirname, '../uploads');
         if (!fs.existsSync(uploadPath)) {
             fs.mkdirSync(uploadPath, { recursive: true });
@@ -41,8 +55,8 @@ exports.upload = multer({ storage: storage });
 // Add a new product
 exports.showAddProductPage = async (req, res) => {
     try {
-        const categories = await Category.find(); 
-        res.render('admin/addProduct', { categories }); 
+        const categories = await Category.find();
+        res.render('admin/addProduct', { categories });
     } catch (error) {
         console.error('Error fetching categories:', error);
         res.status(500).send('Server Error');
@@ -53,14 +67,14 @@ exports.addProduct = async (req, res) => {
     try {
         console.log('Processing addProduct request.');
 
-        const { productName, price, category, description,stock } = req.body;
+        const { productName, price, category, description, stock } = req.body;
 
-        console.log(productName, price, category, description,stock );
-        
+        console.log(productName, price, category, description, stock);
+
         const imagePaths = req.files.map(file => `uploads/${file.filename}`);
 
-        const newProduct = new Product({ 
-            name:productName, 
+        const newProduct = new Product({
+            name: productName,
             price,
             category,
             description,
@@ -71,13 +85,13 @@ exports.addProduct = async (req, res) => {
         await newProduct.save();
         console.log('Product added successfully.');
 
-        res.status(200).json({success:true})
+        res.status(200).json({ success: true })
 
     } catch (error) {
         console.error('Error adding product:', error);
-        res.status(500).json({ 
-            success: false, 
-            message: 'Error adding product' 
+        res.status(500).json({
+            success: false,
+            message: 'Error adding product'
         });
     }
 };
@@ -88,25 +102,25 @@ exports.updateProduct = async (req, res) => {
     const productId = req.params.id;
     try {
         const updatedData = {
-         name: req.body.name,
-         price: req.body.price,
-         description: req.body.description,
-         category: req.body.category,
-         stock:req.body.stock
+            name: req.body.name,
+            price: req.body.price,
+            description: req.body.description,
+            category: req.body.category,
+            stock: req.body.stock
         };
         if (req.files && req.files.length > 0) {
             const imagePaths = req.files.map(file => `uploads/${file.filename}`);
-            updatedData.images = imagePaths; 
+            updatedData.images = imagePaths;
         }
-        
+
 
         await Product.findByIdAndUpdate(productId, updatedData, { new: true });
 
-        
+
         res.redirect('/admin/products');
     } catch (error) {
         console.error(error);
-        
+
         res.status(500).send('Error updating product');
     }
 };
@@ -116,7 +130,7 @@ exports.updateProduct = async (req, res) => {
 exports.toggleListing = async (req, res) => {
     const productId = req.params.id;
     const { isListed } = req.body;
-    
+
     try {
         const updatedProduct = await Product.findByIdAndUpdate(
             productId,
@@ -124,7 +138,7 @@ exports.toggleListing = async (req, res) => {
             { new: true }
         );
 
-         if (updatedProduct) {
+        if (updatedProduct) {
             res.json({ success: true, isListed: updatedProduct.isListed });
         } else {
             res.json({ success: false, message: 'Product not found.' });
