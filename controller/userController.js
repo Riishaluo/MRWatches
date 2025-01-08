@@ -244,7 +244,6 @@ exports.verifyOtp = async (req, res) => {
        
         const tempUser = req.session.tempUser; 
         const newUser = new User({
-            userName: tempUser.userName,
             email: tempUser.email,
             password: tempUser.password,
         });
@@ -536,20 +535,22 @@ exports.googleAuthCallback = (req, res, next) => {
         if (err) return next(err);
 
         try {
-            let existingUser = await User.findOne({ email: user.email });
-
-            if (!existingUser) {
-                existingUser = new User({
-                    email: user.email,
-                    password: await bcrypt.hash(STATIC_PASSWORD, 10), 
-                });
-                await existingUser.save();
+            if (!user) {
+                // Handle cases where user is null
+                return res.status(401).send("Authentication failed. User not found.");
             }
 
+            if (user.isBlocked) {
+                // Handle blocked users
+                return res.status(403).send("Your account is blocked. Please contact support.");
+            }
 
-            req.session.userId = existingUser._id;
+            // Set session variables for the authenticated user
+            req.session.userId = user._id;
             req.session.isLoggedIn = true;
+            req.session.isGoogleLogin = user.isGoogleLogin || false; // Optional: Track Google login status
 
+            // Redirect to home or dashboard
             res.redirect('/');
         } catch (err) {
             console.error("Error in Google OAuth callback:", err);
@@ -557,6 +558,9 @@ exports.googleAuthCallback = (req, res, next) => {
         }
     })(req, res, next);
 };
+
+
+
 
 
 

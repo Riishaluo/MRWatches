@@ -5,11 +5,14 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     password: {
         type: String,
-        required: true
+    },
+    isGoogleLogin: {
+        type: Boolean,
+        default: false, 
     },
     isBlocked: {
         type: Boolean,
