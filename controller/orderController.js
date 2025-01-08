@@ -257,6 +257,32 @@ exports.returnOrder = async (req, res) => {
         });
         await Promise.all(updateStockPromises);
 
+        const wallet = await Wallet.findOne({ user: order.userId });
+
+        if (!wallet) {
+            const balance = order.totalPrice;
+            const newWallet = new Wallet({
+                user: req.session.userId,
+                balance,
+                transaction: [{
+                    amount: balance,
+                    date: new Date(),
+                    type: "debit"
+                }]
+            });
+            await newWallet.save();
+        } else {
+            const refundAmount = order.totalPrice || 0;
+            wallet.balance += refundAmount;
+            const transaction = {
+                amount: refundAmount,
+                date: new Date(),
+                type: "credit"
+            };
+            wallet.transaction.push(transaction);
+            await wallet.save();
+        }
+
         order.status = "returned";
 
         await order.save();
