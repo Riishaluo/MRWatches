@@ -536,28 +536,16 @@ exports.googleAuthCallback = (req, res, next) => {
         if (err) return next(err);
 
         try {
-            let existingUser = await User.findOne({ googleId: user.googleId });
-            if (!existingUser) {
-                const email = user.email;
-                existingUser = await User.findOne({ email });
+            let existingUser = await User.findOne({ email: user.email });
 
-                if (existingUser) {
-                    if (!existingUser.googleId) {
-                        existingUser.googleId = user.googleId;
-                        await existingUser.save();
-                    } else {
-                        return res.status(400).send('This email is already associated with another Google account.');
-                    }
-                } else {
-                    const hashedPassword = await bcrypt.hash(STATIC_PASSWORD, 10);
-                    existingUser = new User({
-                        googleId: user.googleId,
-                        email,
-                        password: hashedPassword,
-                    });
-                    await existingUser.save();
-                }
+            if (!existingUser) {
+                existingUser = new User({
+                    email: user.email,
+                    password: await bcrypt.hash(STATIC_PASSWORD, 10), 
+                });
+                await existingUser.save();
             }
+
 
             req.session.userId = existingUser._id;
             req.session.isLoggedIn = true;

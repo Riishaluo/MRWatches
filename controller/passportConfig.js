@@ -19,7 +19,6 @@ passport.use(
             console.log("Profile Object:", profile); 
             try {
                 const user = {
-                    googleId: profile.id,
                     email: profile.emails[0].value,
                 };
                 done(null, user); 
