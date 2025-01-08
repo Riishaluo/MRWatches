@@ -257,6 +257,8 @@ exports.returnOrder = async (req, res) => {
         });
         await Promise.all(updateStockPromises);
 
+        order.status = "returned";
+
         await order.save();
 
         return res.status(200).json({ success: true, message: 'Order return initiated successfully' });
