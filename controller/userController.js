@@ -415,7 +415,6 @@ exports.verifyForgotOtp = async (req, res) => {
 
 
 //reset 
-
 // Render the reset password page
 exports.renderResetPassword = (req, res) => {
     res.render("user/resetPassword");

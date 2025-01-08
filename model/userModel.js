@@ -2,9 +2,10 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
-    googleId : {
-    type : String,
-    unique : true
+    googleId: {
+        type: String,
+        unique: true,
+        sparse: true
     },
     email: {
         type: String,
@@ -20,7 +21,7 @@ const userSchema = new mongoose.Schema({
         default: false,
     },
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
-}, { timestamps: true }); 
+}, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
 
